@@ -1,27 +1,16 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-
-// Pages
-import ComplaintsPage from "./Pages/ComplaintPage.jsx";
-
-// Optional: Navbar
-import Navbar from "./components/Navbar.jsx";
+import Navbar from "./Components/Navbar.jsx";
+import PostsPage from "./Pages/ComplaintPage.jsx";
 
 function App() {
   return (
     <Router>
-      {/* Navbar visible on all pages */}
       <Navbar />
-
       <div className="min-h-screen bg-gray-100 p-4">
         <Routes>
-          {/* Redirect root to complaints page */}
-          <Route path="/" element={<Navigate to="/complaints" />} />
-
-          {/* Complaints page */}
-          <Route path="/complaints" element={<ComplaintsPage />} />
-
-          {/* Catch-all 404 */}
+          <Route path="/" element={<Navigate to="/posts" />} />
+          <Route path="/posts" element={<PostsPage />} />
           <Route path="*" element={<h1>404 - Page Not Found</h1>} />
         </Routes>
       </div>
