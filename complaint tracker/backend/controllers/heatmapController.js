@@ -14,7 +14,7 @@ export const getHeatmapPosts = async (req, res) => {
 
     if (locality) {
       values.push(locality);
-      conditions.push(`LOWER(g.level) = 'locality' AND LOWER(g.name) = LOWER($${values.length})`);
+      conditions.push(`LOWER(g.locality) = LOWER($${values.length})`);
     }
 
     const query = `
@@ -35,10 +35,10 @@ export const getHeatmapPosts = async (req, res) => {
 export const getCityLocalities = async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT city, name AS locality
+      SELECT city, locality
       FROM groups
       WHERE city IS NOT NULL
-      ORDER BY city, name
+      ORDER BY city, locality
     `);
 
     // Group by city for easier frontend dropdown

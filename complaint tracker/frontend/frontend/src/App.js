@@ -9,6 +9,9 @@ import Login from "./Pages/Login.jsx";
 import Signup from "./Pages/Signup.jsx";
 import Portal from "./Pages/Portal.jsx";
 import HeatmapPage from "./Pages/HeatmapPage.jsx";
+import GroupIndex from "./Pages/GroupIndex.jsx";
+import GroupPage from "./Pages/Group.jsx";
+import ReportPage from "./Components/Reports/ReportPage.jsx";
 // Components
 import Navbar from "./Components/Navbar.jsx";
 
@@ -53,6 +56,9 @@ function App() {
               <Route path="/portal" element={<Portal />} />
               <Route path="/complaints" element={<ComplaintsPage />} />
               <Route path="/heatmap" element={<HeatmapPage />} />
+              <Route path="/group" element={<GroupPage />} />
+              <Route path="/groupIndex" element={<GroupIndex />} />
+              <Route path="/reports" element={<ReportPage />} />
               <Route path="*" element={<h1>404 - Page Not Found</h1>} />
             </Routes>
           </div>

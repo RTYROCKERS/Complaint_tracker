@@ -1,12 +1,12 @@
 import pool from "../db.js";
 
 export const createGroup = async(req,res) => {
-    const {name,level,city,user_id} =req.body;
+    const {name,locality,city,user_id} =req.body;
     try{
         const result = await pool.query(
-            `INSERT INTO groups(name,level,city,created_by)
+            `INSERT INTO groups(name,locality,city,created_by)
             VALUES ($1, $2, $3, $4) RETURNING *`,
-            [name,level,city,user_id]
+            [name,locality,city,user_id]
         );
 
         res.json({ message: "Group created", complaint: result.rows[0] });
@@ -16,6 +16,60 @@ export const createGroup = async(req,res) => {
     }
 
 };
+export const getPosts = async(req,res) => {
+    const {group_id}=req.body;
+    try{
+      const query = `
+        SELECT post_id, title, description, status, type, severity, created_at
+        FROM posts
+        WHERE group_id = $1
+        ORDER BY created_at DESC
+      `;
+
+      const result = await pool.query(query,[group_id]);
+      res.json(result.rows);
+    } catch (err) {
+      console.error("Error fetching posts:", err.message);
+      res.status(500).json({ error: "Server error" });
+    }
+};
+export const getGroups = async (req, res) => {
+  try {
+    const { city, locality } = req.query;
+
+    const values = [];
+    const conditions = [];
+
+    if (city) {
+      values.push(city);
+      conditions.push(`LOWER(g.city) = LOWER($${values.length})`);
+    }
+    if (locality) {
+      values.push(locality);
+      conditions.push(
+        `LOWER(g.locality) = LOWER($${values.length})`
+      );
+    }
+
+    let query = `
+      SELECT g.group_id, g.name, g.created_by, u.name AS created_by_name, g.created_at
+      FROM groups g
+      JOIN users u ON g.created_by = u.u_id
+    `;
+
+    if (conditions.length > 0) {
+      query += ` WHERE ${conditions.join(" AND ")}`;
+    }
+
+    query += " ORDER BY g.created_at DESC";
+
+    const result = await pool.query(query, values);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching groups:", err.message);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 export const createComplaint = async (req, res) => {
   const { user_id, group_id, title, description, status} = req.body;
@@ -24,7 +78,7 @@ export const createComplaint = async (req, res) => {
   try {
     const result = await pool.query(
       `INSERT INTO posts (user_id, group_id, title, description, status, photoUrl)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
       [user_id, group_id, title, description, status, photoUrl]
     );
 

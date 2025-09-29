@@ -20,14 +20,14 @@ export default function Navbar() {
         <Link to="/complaints" className="hover:text-gray-200">
           Complaints
         </Link>
-        <Link to="/dashboard" className="hover:text-gray-200">
-          Dashboard
+        <Link to="/reports" className="hover:text-gray-200">
+          Reports
         </Link>
         <Link to="/heatmap" className="hover:text-gray-200">
-          Heatmap Visualization
+          HeatmapVisualization
         </Link>
-        <Link to="/settings" className="hover:text-gray-200">
-          Settings
+        <Link to="/groupIndex" className="hover:text-gray-200">
+          ViewGroups
         </Link>
       </div>
     </nav>
