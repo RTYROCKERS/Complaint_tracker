@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+// Pages
+import ComplaintsPage from "./Pages/ComplaintPage.jsx";
+
+// Optional: Navbar
+import Navbar from "./components/Navbar.jsx";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      {/* Navbar visible on all pages */}
+      <Navbar />
+
+      <div className="min-h-screen bg-gray-100 p-4">
+        <Routes>
+          {/* Redirect root to complaints page */}
+          <Route path="/" element={<Navigate to="/complaints" />} />
+
+          {/* Complaints page */}
+          <Route path="/complaints" element={<ComplaintsPage />} />
+
+          {/* Catch-all 404 */}
+          <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
