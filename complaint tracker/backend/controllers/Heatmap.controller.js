@@ -1,7 +1,7 @@
-const pool = require("../db");
+const pool = require("../db.js");
 
 // Controller to get posts for heatmap
-const getHeatmapPosts = async (req, res) => {
+export const  getHeatmapPosts = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT latitude, longitude 
@@ -15,6 +15,4 @@ const getHeatmapPosts = async (req, res) => {
   }
 };
 
-module.exports = {
-  getHeatmapPosts,
-};
+
