@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import HeatMap from "../Components/Heatmap.jsx";
-import { getHeatmapPosts } from "../controllers/Heatmap.controller.js";
+import { getHeatmapPosts } from "../api/heatmap.js"; // correct frontend import
 
-export default function HeatMapPage() {
+export default function HeatmapPage() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
