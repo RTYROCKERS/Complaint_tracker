@@ -4,6 +4,8 @@ import authRoutes from "./routes/login_signup.js";
 import complaintRoutes from "./routes/post.js";
 import statusRoutes from "./routes/status_change.js";
 import resolvementRoutes from "./routes/post_update.js";
+import postsRoutes from "./routes/complaint.js";
+
 
 const app = express();
 app.use(cors());
