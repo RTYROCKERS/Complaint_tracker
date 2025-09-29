@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import cors from "cors";
 import authRoutes from "./routes/login_signup.js";
 import complaintRoutes from "./routes/post.js";
 import statusRoutes from "./routes/status_change.js";
