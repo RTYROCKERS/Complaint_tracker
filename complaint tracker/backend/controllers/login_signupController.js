@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../db.js";
-
+import { authenticate } from "../Middlewares/auth.middleware.js";
 const SECRET_KEY = "supersecretkey"; // env var in production
 
 export const signup = async (req, res) => {
