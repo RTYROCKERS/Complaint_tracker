@@ -6,8 +6,8 @@ export default function Navbar() {
       {/* Left Section: Logo + Slogan */}
       <div className="flex items-center gap-3">
         {/* Logo Placeholder */}
-        <div className="w-10 h-10 bg-white text-blue-600 flex items-center justify-center font-bold rounded-full">
-          Insert Logo Here
+        <div className="w-10 h-10 bg-white text-blue-600 flex items-center justify-center font-bold rounded-full overflow-hidden">
+          Insert logo Here
         </div>
         {/* Slogan */}
         <span className="font-semibold italic text-sm sm:text-base">
@@ -28,6 +28,12 @@ export default function Navbar() {
         </Link>
         <Link to="/groupIndex" className="hover:text-gray-200">
           ViewGroups
+        </Link>
+        <Link to="/livestats" className="hover:text-blue-500">
+        Live Stats
+        </Link>
+        <Link to="/sla" className="hover:text-gray-200">
+          SLA Tracking
         </Link>
       </div>
     </nav>

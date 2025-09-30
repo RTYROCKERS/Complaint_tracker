@@ -1,0 +1,221 @@
+/* frontend/src/Components/sla.css */
+
+/* font import (optional if you added link in index.html) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root{
+  --bg: #0f1724;            /* page background (if you want card-on-dark) */
+  --card: #0b1220;          /* card background */
+  --muted: #9aa4b2;        /* muted text */
+  --text: #e6eef8;         /* main text color */
+  --accent: #6ee7b7;       /* green accent */
+  --accent-2: #60a5fa;     /* blue accent */
+  --danger: #ff6b6b;       /* urgent */
+  --warning: #ffb86b;      /* warning */
+  --glass: rgba(255,255,255,0.04);
+  --card-radius: 14px;
+  --shadow: 0 8px 30px rgba(2,6,23,0.6);
+  --border: rgba(255,255,255,0.04);
+}
+
+/* Page wrapper (if used) */
+.sla-page {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  color: var(--text);
+  background: linear-gradient(180deg,#071427 0%, #0b1220 100%);
+  padding: 24px;
+  min-height: 100%;
+}
+
+/* Card container for the table and summary */
+.sla-table-wrapper {
+  max-width: 1100px;
+  margin: 16px auto;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--card-radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+/* Header area: title + summary */
+.sla-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.sla-header .title {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.sla-header h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  color: var(--text);
+}
+.sla-summary {
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* small summary chips */
+.sla-chip {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.03);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Table styling */
+.sla-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* Gradient header row */
+.sla-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #071724;
+  background: linear-gradient(90deg, rgba(96,165,250,0.95), rgba(110,231,183,0.95));
+  color: #04202b;
+  letter-spacing: 0.2px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Body cells */
+.sla-table tbody td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text);
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+/* Zebra rows */
+.sla-table tbody tr:nth-child(odd) td {
+  background: rgba(255,255,255,0.01);
+}
+
+/* Hover */
+.sla-table tbody tr:hover td {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(2,6,23,0.35);
+  transition: all 180ms ease;
+  background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+}
+
+/* Overdue highlight (strong) */
+.sla-overdue td {
+  background: linear-gradient(90deg, rgba(255,130,122,0.06), rgba(255,255,255,0.01));
+  border-left: 4px solid rgba(255,90,80,0.9);
+}
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #08121a;
+}
+
+.badge.pending { background: rgba(255,198,64,0.12); color: #ffb86b; }
+.badge.open { background: rgba(96,165,250,0.12); color: var(--accent-2); }
+.badge.in_progress { background: rgba(96,165,250,0.14); color: #2563eb; }
+.badge.resolved { background: rgba(110,231,183,0.12); color: #059669; }
+.badge.cancelled { background: rgba(196,196,196,0.08); color: #94a3b8; }
+
+/* Severity chips */
+.severity {
+  display:inline-block;
+  min-width: 50px;
+  text-align:center;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.severity-low { background: rgba(34,197,94,0.08); color: #16a34a; }
+.severity-medium { background: rgba(250,204,21,0.07); color: #b45309; }
+.severity-high { background: rgba(239,68,68,0.06); color: #dc2626; }
+
+/* small author text */
+.author {
+  display:flex;
+  flex-direction:column;
+}
+.author .name {
+  font-weight:600;
+  color:var(--text);
+}
+.author .meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .sla-table-wrapper {
+    padding: 12px;
+  }
+  .sla-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .sla-table thead th {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+  .sla-table tbody td {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+}
+
+/* Utility small text */
+.small-muted {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Empty state */
+.sla-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  background: rgba(255,255,255,0.01);
+  border-radius: 8px;
+  margin-top: 8px;
+}
