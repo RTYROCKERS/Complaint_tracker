@@ -8,6 +8,6 @@ router.post("/newGroup", createGroup);
 router.post("/complaints", upload.single("photo"), createComplaint);
 router.post("/replies", upload.single("photo"), addReply);
 router.get("/getGroups", getGroups);
-router.get("/getPosts", getPosts);
+router.post("/getPosts", getPosts);
 
 export default router;

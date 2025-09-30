@@ -20,7 +20,7 @@ export const getPosts = async(req,res) => {
     const {group_id}=req.body;
     try{
       const query = `
-        SELECT post_id, title, description, status, type, severity, created_at
+        SELECT post_id, title, description, status, type, severity, created_at,photoUrl
         FROM posts
         WHERE group_id = $1
         ORDER BY created_at DESC
@@ -72,14 +72,14 @@ export const getGroups = async (req, res) => {
 };
 
 export const createComplaint = async (req, res) => {
-  const { user_id, group_id, title, description, status} = req.body;
+  const { user_id, group_id, title, description, status, latitude, longitude, type, severity} = req.body;
   const photoUrl = req.file ? `/uploads/${req.file.filename}` : null;
 
   try {
     const result = await pool.query(
-      `INSERT INTO posts (user_id, group_id, title, description, status, photoUrl)
-      VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [user_id, group_id, title, description, status, photoUrl]
+      `INSERT INTO posts (user_id, group_id, title, description, status, photoUrl, latitude, longitude, type, severity)
+      VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9,$10) RETURNING *`,
+      [user_id, group_id, title, description, status, photoUrl, latitude, longitude, type, severity]
     );
 
     res.json({ message: "Complaint submitted", complaint: result.rows[0] });
