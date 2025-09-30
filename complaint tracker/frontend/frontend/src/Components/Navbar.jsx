@@ -32,6 +32,9 @@ export default function Navbar() {
         <Link to="/livestats" className="hover:text-blue-500">
         Live Stats
         </Link>
+        <Link to="/sla" className="hover:text-gray-200">
+          SLA Tracking
+        </Link>
       </div>
     </nav>
   );
