@@ -17,7 +17,7 @@ export async function getSlaStats(req, res) {
           p.description,
           p.status,
           p.created_at,
-          p."photoUrl",   -- correct casing for column name
+           p.photourl AS "photoUrl",   -- correct casing for column name
           p.latitude,
           p.longitude,
           p.type,

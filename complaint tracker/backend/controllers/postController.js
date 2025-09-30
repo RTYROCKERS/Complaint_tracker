@@ -1,4 +1,5 @@
 import pool from "../db.js";
+import { notifyOnPostStatusChange } from "../services/notificationService.js";
 
 export const createGroup = async(req,res) => {
     const {name,locality,city,user_id} =req.body;
@@ -106,4 +107,38 @@ export const addReply = async(req,res)=>{
         res.status(500).json({ error: "Failed to submit complaint_reply" });
     }
 
+};
+export const updatePostStatus = async (req, res) => {
+  const postId = parseInt(req.params.id, 10);
+  const { status } = req.body;
+
+  if (!postId || !status) {
+    return res.status(400).json({ error: "post id and status required" });
+  }
+
+  try {
+    // fetch old status
+    const oldRes = await pool.query("SELECT status FROM posts WHERE post_id = $1", [postId]);
+    if (oldRes.rows.length === 0) return res.status(404).json({ error: "Post not found" });
+    const oldStatus = oldRes.rows[0].status;
+
+    // update status
+    const upd = await pool.query(
+      "UPDATE posts SET status = $1 WHERE post_id = $2 RETURNING *",
+      [status, postId]
+    );
+    const updatedPost = upd.rows[0];
+
+    // try to notify (do not block on failure)
+    try {
+      await notifyOnPostStatusChange(postId, oldStatus, status);
+    } catch (notifyErr) {
+      console.error("notifyOnPostStatusChange failed:", notifyErr);
+    }
+
+    res.json(updatedPost);
+  } catch (err) {
+    console.error("updatePostStatus error:", err);
+    res.status(500).json({ error: "Failed to update post status" });
+  }
 };
