@@ -29,3 +29,25 @@ export const createComplaint = async (formData) => {
     throw err;
   }
 }
+export const addReply = async (formData) => {
+  try {
+    const res = await axios.post(`${API}/replies`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error creating complaint:", err.message);
+    throw err;
+  }
+};
+export const getPostReplies = async (post_id) => {
+  try {
+    const res = await axios.post(`${API}/getPostReplies`, {
+      post_id,
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching group posts:", err.message);
+    return [];
+  }
+};

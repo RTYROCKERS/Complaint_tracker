@@ -3,9 +3,9 @@ const {Pool} = pkg;
 const pool = new Pool({
   user: "postgres",        //  postgres username
   host: "localhost",
-  database: "COMPLAINT_TRACKER",  //  database name
-  password: "santosh@8528095052",      //  postgres password
-  port: 5432,
+  database: "circus_grievance",  //  database name
+  password: "ruchir2005",      //  postgres password
+  port: 5433,
 });
 
 export default pool;

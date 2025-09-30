@@ -12,6 +12,7 @@ import HeatmapPage from "./Pages/HeatmapPage.jsx";
 import GroupIndex from "./Pages/GroupIndex.jsx";
 import GroupPage from "./Pages/Group.jsx";
 import ReportPage from "./Components/Reports/ReportPage.jsx";
+import Post from "./Pages/Post.jsx";
 // Components
 import Navbar from "./Components/Navbar.jsx";
 import LiveStatsPage from "./Pages/LiveStatsPage.jsx";
@@ -50,9 +51,13 @@ function App() {
   return (
     <Router>
       {token ? (
-        <>
-          <Navbar />
-          <div className="min-h-screen bg-gray-100 p-4">
+        <div className="flex flex-col h-screen">
+          {/* Navbar (10%) */}
+          
+            <Navbar />
+
+          {/* Main Content (90%) */}
+          <div className="mt-[10%] h-[90%] overflow-y-auto bg-gray-100 p-4">
             <Routes>
               <Route path="/portal" element={<Portal />} />
               <Route path="/complaints" element={<ComplaintsPage />} />
@@ -62,10 +67,11 @@ function App() {
               <Route path="/reports" element={<ReportPage />} />
               <Route path="/livestats" element={<LiveStatsPage />} />
               <Route path="/sla" element={<SLAPage />} />
+              <Route path="/post/:post_id" element={<Post/>} />
               <Route path="*" element={<h1>404 - Page Not Found</h1>} />
             </Routes>
           </div>
-        </>
+        </div>
       ) : (
         <Routes>
           <Route path="/" element={<Intro />} />

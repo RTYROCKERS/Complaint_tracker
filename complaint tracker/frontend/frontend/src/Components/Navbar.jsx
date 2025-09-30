@@ -1,17 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 
 export default function Navbar() {
+  const navigate=useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // remove JWT token
+    window.location.reload(); // refresh the page
+  };
   return (
     <nav className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between shadow-md">
       {/* Left Section: Logo + Slogan */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3" style={{ width: "40%" }}>
         {/* Logo Placeholder */}
-        <div className="w-10 h-10 bg-white text-blue-600 flex items-center justify-center font-bold rounded-full overflow-hidden">
-          Insert logo Here
-        </div>
+          <img src="./Logo.jpg" style={{ height: "20%", width: "15%" }} alt="Logo" />
         {/* Slogan */}
         <span className="font-semibold italic text-sm sm:text-base">
-          “Turning Complaints into Solutions”
+          “                Turning Complaints into Solutions                 ”
         </span>
       </div>
 
@@ -35,6 +38,12 @@ export default function Navbar() {
         <Link to="/sla" className="hover:text-gray-200">
           SLA Tracking
         </Link>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-white font-semibold"
+        >
+          Logout
+        </button>
       </div>
     </nav>
   );

@@ -20,7 +20,7 @@ export const getPosts = async(req,res) => {
     const {group_id}=req.body;
     try{
       const query = `
-        SELECT post_id, title, description, status, type, severity, created_at,photoUrl
+        SELECT post_id, user_id,title, description, status, type, severity, created_at,photoUrl
         FROM posts
         WHERE group_id = $1
         ORDER BY created_at DESC
@@ -106,4 +106,22 @@ export const addReply = async(req,res)=>{
         res.status(500).json({ error: "Failed to submit complaint_reply" });
     }
 
+};
+export const getReply = async(req,res) => {
+    const {post_id}=req.body;
+    try{
+      const query = `
+        SELECT p.reply_id, p.content, p.created_at, u.name
+        FROM post_replies p
+        JOIN users u ON u.u_id = p.user_id
+        WHERE p.post_id = $1
+        ORDER BY p.created_at DESC
+      `;
+
+      const result = await pool.query(query,[post_id]);
+      res.json(result.rows);
+    } catch (err) {
+      console.error("Error fetching posts:", err.message);
+      res.status(500).json({ error: "Server error" });
+    }
 };

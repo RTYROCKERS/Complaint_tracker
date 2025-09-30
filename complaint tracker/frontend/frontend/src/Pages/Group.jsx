@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation,Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
@@ -100,7 +100,9 @@ export default function GroupPage() {
         posts.map((p) => (
           
           <div key={p.post_id} className="border rounded-lg p-4 mb-3 bg-white shadow">
-            <h2 className="text-lg font-semibold">{p.title}</h2>
+            <Link to={`/post/${p.post_id}`} state={{ post: p}}>
+              <h2 className="text-lg font-semibold cursor-pointer hover:underline">{p.title}</h2>
+            </Link>
             <p className="text-gray-700">{p.description}</p>
             {p.photourl && (
               <img
