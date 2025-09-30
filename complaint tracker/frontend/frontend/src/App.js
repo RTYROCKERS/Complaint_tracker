@@ -14,7 +14,7 @@ import GroupPage from "./Pages/Group.jsx";
 import ReportPage from "./Components/Reports/ReportPage.jsx";
 // Components
 import Navbar from "./Components/Navbar.jsx";
-
+import LiveStatsPage from "./Pages/LiveStatsPage.jsx";
 function App() {
   // Initialize token safely
   const [token, setToken] = useState(null);
@@ -59,6 +59,7 @@ function App() {
               <Route path="/group" element={<GroupPage />} />
               <Route path="/groupIndex" element={<GroupIndex />} />
               <Route path="/reports" element={<ReportPage />} />
+              <Route path="/livestats" element={<LiveStatsPage />} />
               <Route path="*" element={<h1>404 - Page Not Found</h1>} />
             </Routes>
           </div>
