@@ -1,25 +1,26 @@
-// frontend/src/api/posts.js
+// frontend/src/api/heatmap.js
 import axios from "axios";
+
+const BASE = "http://localhost:5000";
 
 export const getHeatmapPosts = async (city = "", locality = "") => {
   try {
-    const res = await axios.get("http://localhost:5000/api/posts/heatmap", {
-      params: { city, locality }, // send city & locality as query parameters
+    const res = await axios.get(`${BASE}/api/posts/heatmap`, {
+      params: { city, locality },
     });
-    return res.data; // array of posts with latitude, longitude, type, severity, etc.
+    return res.data; // array of { latitude, longitude, type, days_required, post_id }
   } catch (err) {
-    console.error("Error fetching heatmap posts:", err.message);
+    console.error("Error fetching heatmap posts:", err?.message || err);
     return [];
   }
 };
 
 export const getCityLocalities = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/api/posts/getlocations");
-    return res.data; 
-    // returns object like { "Bangalore": ["MG Road", "Indiranagar"], "Prayagraj": ["Civil Lines", "Katra"] }
+    const res = await axios.get(`${BASE}/api/posts/getlocations`);
+    return res.data;
   } catch (err) {
-    console.error("Error fetching city-locality combinations:", err.message);
+    console.error("Error fetching city-locality combinations:", err?.message || err);
     return {};
   }
 };

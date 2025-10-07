@@ -1,3 +1,4 @@
+// backend/controllers/heatmapController.js
 import pool from "../db.js";
 
 export const getHeatmapPosts = async (req, res) => {
@@ -17,8 +18,14 @@ export const getHeatmapPosts = async (req, res) => {
       conditions.push(`LOWER(g.locality) = LOWER($${values.length})`);
     }
 
+    // select days_required (your renamed severity column), cast latitude/longitude to float
     const query = `
-      SELECT p.latitude, p.longitude, p.type, p.severity
+      SELECT
+        p.post_id,
+        p.latitude::float AS latitude,
+        p.longitude::float AS longitude,
+        p.type,
+        p.days_required
       FROM posts p
       JOIN groups g ON p.group_id = g.group_id
       WHERE ${conditions.join(" AND ")}
@@ -34,10 +41,11 @@ export const getHeatmapPosts = async (req, res) => {
 
 export const getCityLocalities = async (req, res) => {
   try {
+    // get distinct non-null city/locality pairs
     const result = await pool.query(`
-      SELECT city, locality
+      SELECT DISTINCT city, locality
       FROM groups
-      WHERE city IS NOT NULL
+      WHERE city IS NOT NULL AND locality IS NOT NULL
       ORDER BY city, locality
     `);
 
@@ -45,7 +53,10 @@ export const getCityLocalities = async (req, res) => {
     const cityLocalities = {};
     result.rows.forEach(r => {
       if (!cityLocalities[r.city]) cityLocalities[r.city] = [];
-      cityLocalities[r.city].push(r.locality);
+      // avoid duplicate localities
+      if (!cityLocalities[r.city].includes(r.locality)) {
+        cityLocalities[r.city].push(r.locality);
+      }
     });
 
     res.json(cityLocalities);

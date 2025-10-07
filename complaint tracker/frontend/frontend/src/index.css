@@ -173,3 +173,33 @@ form {
   body { font-size: 15px; }
   nav, .navbar { flex-direction: column; align-items: flex-start; }
 }
+<<<<<<< Updated upstream
+=======
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  height: 20vh; /* 10% of viewport */
+  padding: 0 2rem;
+}
+/* optional: fine-tune cluster bubble */
+.marker-cluster div {
+  background-color: rgba(255,102,102,0.9);
+  color: white;
+  border-radius: 50%;
+  padding: 6px;
+  font-weight: 700;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+}
+
+/* legend box */
+.info.legend {
+  background: white;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+>>>>>>> Stashed changes
