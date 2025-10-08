@@ -18,7 +18,7 @@ export const getHeatmapPosts = async (req, res) => {
     }
 
     const query = `
-      SELECT p.latitude, p.longitude, p.type, p.severity
+      SELECT p.latitude, p.longitude, p.type, p.days_required
       FROM posts p
       JOIN groups g ON p.group_id = g.group_id
       WHERE ${conditions.join(" AND ")}

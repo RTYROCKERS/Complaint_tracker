@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-function Login({ setToken }) {
+function Login({ setToken ,onLogin}) {
   const [aadhar, setAadhar] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -17,8 +17,8 @@ function Login({ setToken }) {
         });
 
         const data = res.data; // axios already parses JSON
-
-        localStorage.setItem("token", data.token);
+        onLogin(data.token);
+        //localStorage.setItem("token", data.token);
         setToken(data.token);
         navigate("/portal");
     } catch (err) {

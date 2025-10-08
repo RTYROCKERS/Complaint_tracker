@@ -17,7 +17,7 @@ export default function AddReply({ post }) {
 
     const formData = new FormData();
     formData.append("post_id", post.post_id);
-    formData.append("user_id", post.user_id);
+    formData.append("user_id", localStorage.getItem("userId"));
     formData.append("content", content);
     if (photo) formData.append("photo", photo);
     console.log(post);

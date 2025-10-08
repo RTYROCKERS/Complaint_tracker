@@ -5,7 +5,7 @@ import SLATable from '../Components/SLATable.jsx';
 
 export default function SLAPage() {
   const [data, setData] = useState({
-    threshold_hours: 72,
+    threshold_hours: 24,
     total_open: 0,
     overdue_count: 0,
     posts: []

@@ -17,37 +17,68 @@ import Post from "./Pages/Post.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import LiveStatsPage from "./Pages/LiveStatsPage.jsx";
 import SLAPage from './Pages/SLAPage.jsx';
+const API = "http://localhost:5000";
 function App() {
   // Initialize token safely
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
+  const [loading, setLoading] = useState(true);
 
-  // Read token from localStorage on mount
-  useEffect(() => {
-    const verifyToken = async (t) => {
-      try {
-        const res = await axios.get("http://localhost:5000/auth/verify", {
-          headers: { Authorization: `Bearer ${t}` },
-        });
-        if (res.data.valid) setToken(t);
-        else throw new Error();
-      } catch {
-        localStorage.removeItem("token");
-        setToken(null);
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
+    setToken(null);
+  };
+
+  const verifyToken = async (t) => {
+    if (!t) {
+      handleLogout();
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await axios.get(`${API}/auth/verify`, {
+        headers: { Authorization: `Bearer ${t}` },
+      });
+      if (res.data.valid) {
+        setToken(t);
+        localStorage.setItem("role", res.data.user.role);
+        localStorage.setItem("userId", res.data.user.u_id);
+      } else {
+        handleLogout();
       }
-    };
+    } catch {
+      handleLogout();
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const token = localStorage.getItem("token");
-    if (token) verifyToken(token);
+  // Verify token on mount
+  useEffect(() => {
+    const t = localStorage.getItem("token");
+    if (t) verifyToken(t);
+    else setLoading(false);
+  }, []);
 
+  // Cross-tab storage listener
+  useEffect(() => {
     const handleStorageChange = () => {
       const t = localStorage.getItem("token");
       if (t) verifyToken(t);
-      else setToken(null);
+      else handleLogout();
     };
-
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
+
+  // Login handler
+  const loginHandler = async (newToken) => {
+    localStorage.setItem("token", newToken);
+    await verifyToken(newToken);
+  };
+
+  if (loading) return <p>Loading...</p>;
   return (
     <Router>
       {token ? (
@@ -75,7 +106,7 @@ function App() {
       ) : (
         <Routes>
           <Route path="/" element={<Intro />} />
-          <Route path="/login" element={<Login setToken={setToken} />} />
+          <Route path="/login" element={<Login setToken={setToken} onLogin={loginHandler} />} />
           <Route path="/signup" element={<Signup setToken={setToken} />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>

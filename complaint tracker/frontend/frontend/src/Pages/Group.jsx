@@ -4,12 +4,15 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 import { getGroupPosts, createComplaint } from "../api/groups.js";
+import FilePreview from "../Components/FilePreview.jsx";
+import socket from "../socket";
 
 const markerIcon = new L.Icon({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
+
 
 function LocationPicker({ setFormData }) {
   const [position, setPosition] = useState(null);
@@ -30,21 +33,36 @@ function LocationPicker({ setFormData }) {
 
 export default function GroupPage() {
   const location = useLocation();
-  const { group_id } = location.state || {};
+  const { group_id, creator, gname } = location.state || {};
   const [posts, setPosts] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [preview, setPreview] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     status: "OPEN",
     type: "",
-    severity: "",
+    days_required: "",
     latitude: "",
     longitude: "",
     photo: null,
   });
+  useEffect(() => {
+    if (!group_id) return;
+    socket.emit("joinGroup", group_id);
+    console.log("Joined group:", group_id);
 
+    // Listen for new posts in the same group
+    socket.on("postAdded", (newPost) => {
+      console.log("📩 New post received via socket:", newPost);
+      setPosts((prev) => [newPost, ...prev]);
+    });
+
+    return () => {
+      socket.off("postAdded");
+    };
+  }, [group_id]);
   useEffect(() => {
     if (!group_id) return;
     const fetchPosts = async () => {
@@ -53,11 +71,50 @@ export default function GroupPage() {
     };
     fetchPosts();
   }, [group_id]);
+  const handlePredict = async () => {
+    if (!formData.photo) {
+      alert("Please upload an image first!");
+      return;
+    }
 
+    const data = new FormData();
+    data.append("file", formData.photo);
+
+    try {
+      const res = await fetch("http://127.0.0.1:8000/predict/", {
+        method: "POST",
+        body: data,
+      });
+
+      if (!res.ok) {
+        throw new Error("Prediction failed");
+      }
+
+      const result = await res.json();
+
+      // Update type and days_required in formData
+      setFormData((prev) => ({
+        ...prev,
+        type: result.predicted_issue,
+        days_required: result.estimated_time_days,
+      }));
+    } catch (err) {
+      console.error(err);
+      alert("Prediction failed. Check console for details.");
+    }
+  };
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
-      setFormData({ ...formData, [name]: files[0] });
+      const file = files[0];
+      setFormData({ ...formData, [name]: file });
+
+      // Generate preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -74,9 +131,8 @@ export default function GroupPage() {
 
     await createComplaint(data);
     setShowModal(false);
-
-    const updated = await getGroupPosts(group_id);
-    setPosts(updated);
+    setPreview(null);
+    
   };
 
   if (!group_id) {
@@ -85,7 +141,7 @@ export default function GroupPage() {
 
   return (
     <div className="container mx-auto p-4 relative">
-      <h1 className="text-2xl font-bold mb-4">Posts in Group #{group_id}</h1>
+      <h1 className="text-2xl font-bold mb-4">Posts in Group {gname}</h1>
 
       <button
         onClick={() => setShowModal(true)}
@@ -100,21 +156,22 @@ export default function GroupPage() {
         posts.map((p) => (
           
           <div key={p.post_id} className="border rounded-lg p-4 mb-3 bg-white shadow">
-            <Link to={`/post/${p.post_id}`} state={{ post: p}}>
+            <Link to={`/post/${p.post_id}`} state={{ post: p,creator:creator, gname: gname}}>
               <h2 className="text-lg font-semibold cursor-pointer hover:underline">{p.title}</h2>
             </Link>
             <p className="text-gray-700">{p.description}</p>
             {p.photourl && (
-              <img
-                src={`http://localhost:5000${p.photourl}`}
-                alt="Post"
-                className="mt-2 max-h-64 rounded"
-              />
-            )}
-            
+              <div className="mt-2 w-64 h-64 border rounded overflow-hidden">
+                <img
+                  src={`http://localhost:5000${p.photourl}`}
+                  alt="Post"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            )}            
             <div className="text-sm text-gray-500 mt-2">
               Status: <span className="font-medium">{p.status}</span> • 
-              Type: {p.type} • Severity: {p.severity} • 
+              Type: {p.type} • Days_Required: {p.days_required} • 
               {new Date(p.created_at).toLocaleString()}
             </div>
           </div>
@@ -163,9 +220,9 @@ export default function GroupPage() {
               />
               <input
                 type="number"
-                name="severity"
-                placeholder="Severity"
-                value={formData.severity}
+                name="days_required"
+                placeholder="Days_Required"
+                value={formData.days_required}
                 onChange={handleChange}
                 className="w-full border p-2 rounded"
               />
@@ -194,6 +251,21 @@ export default function GroupPage() {
                 onChange={handleChange}
                 className="w-full border p-2 rounded"
               />
+              {preview && (
+                <div className="mt-2 mb-2">
+                  <p className="text-sm text-gray-500 mb-1">File Preview:</p>
+                  <div className="border rounded overflow-hidden bg-gray-100">
+                    <FilePreview fileUrl={preview} />
+                  </div>
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={handlePredict}
+                className="mt-2 mb-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              >
+                Predict
+              </button>
 
               <div className="flex justify-end space-x-2">
                 <button

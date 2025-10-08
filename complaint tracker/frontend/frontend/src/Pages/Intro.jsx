@@ -31,7 +31,7 @@ function Intro() {
               to="/login"
               className="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 transition font-semibold shadow-md"
             >
-              Login
+              Login<br></br>
             </Link>
             <Link
               to="/signup"

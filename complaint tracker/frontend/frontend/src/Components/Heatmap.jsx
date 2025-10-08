@@ -12,11 +12,11 @@ export default function Heatmap({ posts }) {
     }).addTo(map);
 
     if (posts.length) {
-      // Use severity as intensity
+      // Use days_required as intensity
       const heatData = posts.map(p => [
         p.latitude,
         p.longitude,
-        p.severity || 0.5, // default 0.5 if severity is missing
+        (p.days_required || 0.5)*0.5, // default 0.5 if days_required is missing
       ]);
       L.heatLayer(heatData, { radius: 25 }).addTo(map);
 
@@ -36,7 +36,7 @@ export default function Heatmap({ posts }) {
             fillOpacity: 0, // invisible, just for popup
           }).addTo(map);
 
-          marker.bindPopup(`<b>Type:</b> ${p.type}<br><b>Severity:</b> ${p.severity}`);
+          marker.bindPopup(`<b>Type:</b> ${p.type}<br><b>Days Required:</b> ${p.days_required}`);
         }
       });
     }

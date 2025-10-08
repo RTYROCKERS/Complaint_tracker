@@ -1,23 +1,56 @@
 import { useEffect, useState } from "react";
 import { getStats } from "../api/apiClient.js";
 import { PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Cell } from "recharts";
+import { io } from "socket.io-client";
+
+const API = "http://localhost:5000";
+const socket = io(API);
 
 const chartColors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A020F0"];
+const STATUSES = ["OPEN", "IN_PROGRESS", "RESOLVED"];
 
 export default function LiveStatsPage() {
   const [stats, setStats] = useState(null);
-  const [chartType, setChartType] = useState("pie"); // pie | bar | line
+  const [chartType, setChartType] = useState("pie");
 
+  // Fetch initial stats
   useEffect(() => {
     getStats().then(res => setStats(res.data));
   }, []);
 
+  // Listen to global post additions
+  useEffect(() => {
+    socket.on("globalPostAdded", (post) => {
+      if (!post || !stats) return;
+
+      // Increment total
+      const newTotal = stats.total + 1;
+
+      // Update byStatus counts
+      const updatedByStatus = [...stats.byStatus];
+      const statusIndex = updatedByStatus.findIndex(s => s.status === post.status);
+      if (statusIndex !== -1) {
+        updatedByStatus[statusIndex] = {
+          ...updatedByStatus[statusIndex],
+          count: updatedByStatus[statusIndex].count + 1
+        };
+      } else {
+        // In case the status is new
+        updatedByStatus.push({ status: post.status, count: 1 });
+      }
+
+      setStats({ total: newTotal, byStatus: updatedByStatus });
+    });
+
+    return () => socket.off("globalPostAdded");
+  }, [stats]);
+
   if (!stats) return <p>Loading...</p>;
 
-  const statusData = stats.byStatus.map((s, i) => ({
-    name: s.status,
-    value: s.count
-  }));
+  const statusData = STATUSES.map(s => {
+    const obj = stats.byStatus.find(b => b.status === s);
+    return { name: s, value: obj ? obj.count : 0 };
+  });
 
   return (
     <div className="p-6">

@@ -7,13 +7,13 @@ function StatusBadge({ status }) {
   return <span className={`badge ${cls}`}>{status}</span>;
 }
 
-function SeverityChip({ severity }) {
-  if (severity == null) return <span className="small-muted">—</span>;
+function SeverityChip({ days_required }) {
+  if (days_required == null) return <span className="small-muted">—</span>;
   const cls =
-    severity >= 7 ? 'severity severity-high'
-    : severity >= 4 ? 'severity severity-medium'
-    : 'severity severity-low';
-  return <span className={cls}>{severity}</span>;
+    days_required >= 7 ? 'days_required days_required-high'
+    : days_required >= 4 ? 'days_required days_required-medium'
+    : 'days_required days_required-low';
+  return <span className={cls}>{days_required}</span>;
 }
 
 function Row({ p }) {
@@ -36,7 +36,7 @@ function Row({ p }) {
       </td>
       <td><StatusBadge status={p.status} /></td>
       <td>{p.hours_open}</td>
-      <td><SeverityChip severity={p.severity} /></td>
+      <td><SeverityChip days_required={p.days_required} /></td>
       <td>{p.type || '—'}</td>
     </tr>
   );
@@ -53,7 +53,7 @@ export default function SLATable({ posts = [] }) {
             <th>Author</th>
             <th>Status</th>
             <th>Hours open</th>
-            <th>Severity</th>
+            <th>Days_Required</th>
             <th>Type</th>
           </tr>
         </thead>

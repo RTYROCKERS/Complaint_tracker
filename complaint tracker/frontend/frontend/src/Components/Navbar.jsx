@@ -4,6 +4,8 @@ export default function Navbar() {
   const navigate=useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token"); // remove JWT token
+    localStorage.removeItem("userId");
+    localStorage.removeItem("role");
     window.location.reload(); // refresh the page
   };
   return (
