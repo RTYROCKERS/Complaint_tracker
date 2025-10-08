@@ -10,11 +10,17 @@ import resolvementRoutes from "./routes/post_update.js";
 import heatmapRoutes from "./routes/heatmap.js";
 import statsRouter from "./routes/stats.js";
 import slaRoutes from "./routes/slaRoutes.js";
+<<<<<<< Updated upstream
 import postsRoutes from "./routes/posts.js";
 import usersRoutes from "./routes/users.js";
 
 // start scheduled jobs AFTER dotenv is loaded (importing the job will start it)
 import "./jobs/slaOverdueNotifier.js";
+=======
+import "./cron/overdueChecker.js";
+import "./triggers/statusChangeWatcher.js";
+import "./triggers/emailNotifier.js";  // ✅ added line
+>>>>>>> Stashed changes
 
 const app = express();
 
@@ -30,12 +36,16 @@ app.use("/", statusRoutes);
 app.use("/", resolvementRoutes);
 app.use("/api/posts", heatmapRoutes);
 app.use("/api/stats", statsRouter);
+<<<<<<< Updated upstream
 
 app.use("/api", slaRoutes);
 app.use("/posts", postsRoutes);
 app.use("/users", usersRoutes);
 
 app.get("/health", (_req, res) => res.json({ status: "ok" })); // optional quick healthcheck
+=======
+app.use("/api", slaRoutes);   // ✅ SLA route
+>>>>>>> Stashed changes
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
