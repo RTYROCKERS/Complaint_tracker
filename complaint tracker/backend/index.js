@@ -1,5 +1,19 @@
+<<<<<<< Updated upstream
 import express from 'express';
 import cors from 'cors';
+=======
+// backend/index.js
+import express from "express";
+import cors from "cors";
+import http from "http";
+
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve("./backend/.env") });
+
+import { Server } from "socket.io";
+
+>>>>>>> Stashed changes
 import authRoutes from "./routes/login_signup.js";
 import complaintRoutes from "./routes/post.js";
 import statusRoutes from "./routes/status_change.js";
