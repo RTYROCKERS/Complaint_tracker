@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import '../css/CreateGroupModal.css';
 
-const API = "http://localhost:5000";
+const API = process.env.REACT_APP_BACKEND;
 
 export default function CreateGroupModal({ onClose }) {
   const [name, setName] = useState("");
@@ -59,6 +60,9 @@ export default function CreateGroupModal({ onClose }) {
         }
         });
     }
+     setTimeout(() => {
+        mapRef.current.invalidateSize();
+     }, 100);
 
     return () => {
       if (mapRef.current) mapRef.current.remove();

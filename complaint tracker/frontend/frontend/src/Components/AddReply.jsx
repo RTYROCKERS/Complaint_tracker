@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-
-import { addReply } from "../api/groups"; // your frontend API function
-
+import { addReply } from "../api/groups";
+import "../css/CreateGroupModal.css";
 export default function AddReply({ post }) {
   const [content, setContent] = useState("");
   const [photo, setPhoto] = useState(null);
@@ -20,11 +19,11 @@ export default function AddReply({ post }) {
     formData.append("user_id", localStorage.getItem("userId"));
     formData.append("content", content);
     if (photo) formData.append("photo", photo);
-    console.log(post);
+
     try {
       setLoading(true);
       setError("");
-      await addReply(formData); // call your API
+      await addReply(formData);
       setContent("");
       setPhoto(null);
     } catch (err) {
@@ -35,31 +34,37 @@ export default function AddReply({ post }) {
   };
 
   return (
-    <div className="border rounded-lg p-4 bg-white shadow mt-4">
-      <h3 className="text-lg font-semibold mb-2">Add Reply</h3>
+    <div className="create-group-modal">
+      <h2>Add Reply</h2>
       {error && <p className="text-red-500 mb-2">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-2">
+      <form onSubmit={handleSubmit}>
         <textarea
           placeholder="Write your reply..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full border p-2 rounded"
           rows={4}
-          required
         />
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setPhoto(e.target.files[0])}
-          className="w-full"
         />
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          {loading ? "Submitting..." : "Submit Reply"}
-        </button>
+        <div className="modal-buttons">
+          <button
+            type="button"
+            className="cancel-btn"
+            onClick={() => {
+              setContent("");
+              setPhoto(null);
+              setError("");
+            }}
+          >
+            Cancel
+          </button>
+          <button type="submit" className="create-btn" disabled={loading}>
+            {loading ? "Submitting..." : "Submit Reply"}
+          </button>
+        </div>
       </form>
     </div>
   );

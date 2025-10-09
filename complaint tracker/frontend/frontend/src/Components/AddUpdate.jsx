@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import FilePreview from "./FilePreview";
-
-const API = "http://localhost:5000";
+import "../css/CreateGroupModal.css";
+const API = process.env.REACT_APP_BACKEND;
 
 export default function AddUpdate({ post_id }) {
   const [showModal, setShowModal] = useState(false);
@@ -40,7 +40,6 @@ export default function AddUpdate({ post_id }) {
       setShowModal(false);
       setPreview(null);
       setFormData({ update_text: "", photo: null });
-      //window.location.reload();
     } catch (err) {
       console.error(err);
       alert("Failed to add update!");
@@ -57,16 +56,16 @@ export default function AddUpdate({ post_id }) {
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-lg max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Add Update</h2>
+        <div className="create-group-modal-overlay">
+          <div className="create-group-modal">
+            <h2>Add Update</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <textarea
                 name="update_text"
                 placeholder="Enter update details..."
                 value={formData.update_text}
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="input-field"
                 required
               />
 
@@ -74,28 +73,25 @@ export default function AddUpdate({ post_id }) {
                 type="file"
                 name="photo"
                 onChange={handleChange}
-                className="w-full border p-2 rounded"
+                className="input-field"
               />
+
               {preview && (
-                <div className="mt-2 mb-2">
-                    <p className="text-sm text-gray-500 mb-1">File Preview:</p>
-                    <div className="border rounded overflow-hidden bg-gray-100">
-                    <FilePreview fileUrl={preview} />
-                    </div>
+                <div className="file-preview mt-2">
+                  <p className="text-sm mb-1">File Preview:</p>
+                  <FilePreview fileUrl={preview} />
                 </div>
-               )}
-              <div className="flex justify-end space-x-2">
+              )}
+
+              <div className="modal-buttons">
                 <button
                   type="button"
+                  className="cancel-btn"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
+                <button type="submit" className="create-btn">
                   Submit
                 </button>
               </div>

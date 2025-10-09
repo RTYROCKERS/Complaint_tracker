@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FilePreview from "../Components/FilePreview"; // adjust path if needed
-
-const API = "http://localhost:5000";
+import "../css/CreateGroupModal.css";
+const API = process.env.REACT_APP_BACKEND;
 
 export default function Updates({ post_id }) {
   const [updates, setUpdates] = useState([]);
@@ -34,37 +34,32 @@ export default function Updates({ post_id }) {
       {updates.map((u) => (
         <div
           key={u.resolvement_id}
-          className="p-4 bg-white rounded-2xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
+          className="add-post-card" // Reuse the Group modal card styling
         >
           {/* Header */}
           <div className="flex justify-between items-center mb-3">
-            
-              <p className="text-sm text-gray-600">
-                Posted by{" "}
-                <span className="font-semibold text-blue-700">
-                  {u.official_name || "Official"}
-                </span>
-              </p>
-              <p className="text-xs text-gray-500">
-                {new Date(u.created_at).toLocaleString()}
-              </p>
-        
-
+            <p className="text-sm text-black">
+              Posted by{" "}
+              <span className="font-semibold text-black">
+                {u.official_name || "Official"}
+              </span>
+            </p>
+            <p className="text-xs text-gray-500">
+              {new Date(u.created_at).toLocaleString()}
+            </p>
+          </div>
 
           {/* Update Text */}
           {u.update_text && (
-            <p className="text-gray-800 mb-3 leading-relaxed">
-              {u.update_text}
-            </p>
+            <p className="text-black mb-3 leading-relaxed">{u.update_text}</p>
           )}
 
-          {/* File (photo/video/pdf/whatever) */}
+          {/* File (photo/video/pdf/etc) */}
           {u.photourl && (
-            <div className="mt-3">
+            <div className="file-preview mt-3">
               <FilePreview fileUrl={`${API}${u.photourl}`} />
             </div>
           )}
-        </div>
         </div>
       ))}
     </div>

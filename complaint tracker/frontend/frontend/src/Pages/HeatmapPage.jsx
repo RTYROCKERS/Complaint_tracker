@@ -30,20 +30,20 @@ export default function HeatmapPage() {
   const localities = selectedCity ? cityLocalities[selectedCity] || [] : [];
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Complaints Heatmap</h1>
 
       {/* Dropdowns */}
-      <div className="flex space-x-4 mb-4">
+      <div className="flex flex-wrap space-x-4 mb-4">
         {/* City Dropdown */}
-        <div>
-          <label className="block mb-1 font-semibold">City:</label>
+        <div className="flex flex-col">
+          <label className="mb-1 font-semibold">City:</label>
           <select
-            className="border border-gray-300 rounded p-2"
+            className="input-field phold"
             value={selectedCity}
             onChange={(e) => {
               setSelectedCity(e.target.value);
-              setSelectedLocality(""); // reset locality when city changes
+              setSelectedLocality("");
             }}
           >
             <option value="">All Cities</option>
@@ -56,13 +56,13 @@ export default function HeatmapPage() {
         </div>
 
         {/* Locality Dropdown */}
-        <div>
-          <label className="block mb-1 font-semibold">Locality:</label>
+        <div className="flex flex-col">
+          <label className="mb-1 font-semibold">Locality:</label>
           <select
-            className="border border-gray-300 rounded p-2"
+            className="input-field phold"
             value={selectedLocality}
             onChange={(e) => setSelectedLocality(e.target.value)}
-            disabled={!selectedCity} // disable if no city selected
+            disabled={!selectedCity}
           >
             <option value="">All Localities</option>
             {localities.map((loc) => (
@@ -75,7 +75,9 @@ export default function HeatmapPage() {
       </div>
 
       {/* Heatmap */}
-      <Heatmap posts={posts} />
+      <div className="border rounded p-4 shadow">
+        <Heatmap posts={posts} />
+      </div>
     </div>
   );
 }

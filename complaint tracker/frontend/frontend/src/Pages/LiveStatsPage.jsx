@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getStats } from "../api/apiClient.js";
 import { PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Cell } from "recharts";
 import { io } from "socket.io-client";
-
+import "../css/Group.css";
 const API = "http://localhost:5000";
 const socket = io(API);
 
@@ -53,30 +53,44 @@ export default function LiveStatsPage() {
   });
 
   return (
-    <div className="p-6">
+    <div className=" p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">📊 Live Complaint Stats</h1>
 
       <div className="mb-4">
-        <label className="font-semibold mr-2">Choose chart type:</label>
-        <select value={chartType} onChange={e => setChartType(e.target.value)}>
+        <label className="font-semibold mr-2" htmlFor="chart-type">
+          Choose chart type:
+        </label>
+        <select
+          id="chart-type"
+          value={chartType}
+          onChange={e => setChartType(e.target.value)}
+          className="phold"
+        >
           <option value="pie">Pie Chart</option>
           <option value="bar">Bar Chart</option>
           <option value="line">Line Chart</option>
         </select>
       </div>
 
-      <div className="border p-4 rounded shadow">
+      <div className="create-group-modal1 border p-4 rounded shadow">
         {chartType === "pie" && (
           <PieChart width={400} height={300}>
-            <Pie data={statusData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
+            <Pie
+              data={statusData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label
+            >
               {statusData.map((_, i) => (
-                <Cell key={i} fill={chartColors[i % chartColors.length]} />
+                <Cell key={i} fill={["#0088FE", "#00C49F", "#FFBB28"][i]} />
               ))}
             </Pie>
             <Tooltip />
           </PieChart>
         )}
-
         {chartType === "bar" && (
           <BarChart width={500} height={300} data={statusData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -87,7 +101,6 @@ export default function LiveStatsPage() {
             <Bar dataKey="value" fill="#8884d8" />
           </BarChart>
         )}
-
         {chartType === "line" && (
           <LineChart width={500} height={300} data={statusData}>
             <CartesianGrid strokeDasharray="3 3" />

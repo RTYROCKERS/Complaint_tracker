@@ -1,0 +1,275 @@
+/* =========================
+   GROUP PAGE – Circus Caravan Theme
+   ========================= */
+
+/* Post Cards */
+.grid > div {
+  margin-top: 1.5rem;
+  background-color: rgba(10, 124, 86, 0.74); /* base green-cream */
+  padding: 1rem 1.2rem;
+  border-radius: 1rem;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.grid > div:hover {
+  background-color: rgba(110, 228, 189, 0.3); /* lighter green-cream on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Status Ribbon */
+.status-ribbon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* Status Colors */
+.status-ribbon.open {
+  background-color: #069e6c; /* circus-teal */
+}
+.status-ribbon.in_progress {
+  background-color: #f5c07b; /* circus-gold */
+}
+.status-ribbon.resolved {
+  background-color: #b967ff; /* circus-purple */
+}
+
+/* Post Title & Description */
+.grid > div h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+.grid > div p {
+  font-size: 0.95rem;
+  color: #4e4a40;
+  margin-bottom: 0.5rem;
+}
+
+/* FilePreview container inside post cards */
+.grid > div .border {
+  background-color: #f8f4ef; /* circus-cream */
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* Modal */
+.fixed {
+  transition: all 0.3s ease;
+}
+.fixed::-webkit-scrollbar {
+  width: 6px;
+}
+.fixed::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+/* Inputs inside modal */
+.fixed input,
+.fixed textarea,
+.fixed select {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  color: #000;
+  border-radius: 0.75rem;
+  padding: 0.6rem 0.8rem;
+}
+
+/* Buttons */
+.btn-cancel {
+  background: #ccc;
+  color: #000;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+.btn-cancel:hover {
+  background: #aaa;
+}
+.btn-submit {
+  background: linear-gradient(135deg, #069e6c, #f5c07b);
+  color: #fff;
+  border-radius: 1.5rem;
+  padding: 0.6rem 1.2rem;
+}
+.btn-submit:hover {
+  background: linear-gradient(135deg, #b967ff, #eccd41);
+  transform: translateY(-2px);
+}
+.phold {
+  color:#000
+}
+/* Map inside modal */
+.modal-map {
+  width: 100%;
+  height: 16rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+}
+/* Add Post Section */
+.add-post-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Add Post Button */
+.btn-add-post {
+  background: linear-gradient(135deg, #06a06c, #f5f4e3);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-add-post:hover {
+  background: linear-gradient(135deg, #09c784, #f8f8e5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Add Post Card */
+.add-post-card {
+  background-color: rgba(6, 158, 108, 0.15); /* light green cream */
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.add-post-card:hover {
+  background-color: rgba(6, 158, 108, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+/* Input Fields inside Add Post Card */
+.add-post-card .input-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 0.5rem;
+  background-color: #fff;
+  font-size: 0.95rem;
+}
+
+/* File Preview inside Add Post Card */
+.add-post-card .file-preview {
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: #f8f4ef;
+  padding: 0.25rem;
+}
+
+/* Predict Button */
+.btn-predict {
+  background: linear-gradient(135deg, #f5c07b, #069e6c);
+  color: #fff;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-predict:hover {
+  background: linear-gradient(135deg, #eccd41, #09c784);
+  transform: translateY(-2px);
+}
+
+/* Submit Button */
+.add-post-card .btn-submit {
+  background: linear-gradient(135deg, #069e6c, #f5c07b);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.add-post-card .btn-submit:hover {
+  background: linear-gradient(135deg, #b967ff, #eccd41);
+  transform: translateY(-2px);
+}
+
+.add-post-card select.input-field {
+  color: #000; /* ensure options show black */
+}
+.create-group-modal {
+  margin-top: 1.5rem;
+  background: #47ec9a;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  width: 90%;
+  max-width: 600px;
+  font-family: "Poppins", "Inter", sans-serif;
+  z-index: 10000;
+  color: #000; /* <-- change from #fff to black */
+}
+.create-group-modal1 {
+  margin-top: 1.5rem;
+  background: #5baf77;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  width: 90%;
+  max-width: 600px;
+  font-family: "Poppins", "Inter", sans-serif;
+  z-index: 10000;
+  color: #000; /* <-- change from #fff to black */
+}
+/* Ensure all text inside the modal is black */
+.create-group-modal,
+.create-group-modal h2,
+.create-group-modal p,
+.create-group-modal label {
+  color: #000;
+}
+
+/* Inputs, textareas, and selects inside modal */
+.create-group-modal input,
+.create-group-modal textarea,
+.create-group-modal select {
+  color: #000;
+  background-color: #ffffff; /* optional for readability */
+}
+
+/* Dropdown options */
+.create-group-modal select option {
+  color: #000;
+}
+
+/* File preview text if any inside modal */
+.create-group-modal .file-preview {
+  color: #000;
+}
+.post-card-link {
+  text-decoration: none;  /* removes underline */
+  color: inherit;         /* inherits text color from children */
+}
+
+/* Prevent color change on hover, active, or visited */
+.post-card-link:hover,
+.post-card-link:visited,
+.post-card-link:active {
+  text-decoration: none;
+  color: inherit;
+}

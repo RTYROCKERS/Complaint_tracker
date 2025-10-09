@@ -1,20 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../css/Intro.css"; // add this import
 
 function Intro() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-purple-900 text-white flex flex-col">
+    <div className="intro-container">
       {/* Header */}
-      <header className="p-6 text-center border-b border-purple-700">
-        <h1 className="text-3xl font-bold tracking-wide">Circus of Wonders</h1>
-        <p className="text-sm mt-2">A Grievance Tracker for the Traveling City</p>
+      <header className="intro-header">
+        <h1 className="intro-title">Circus of Wonders</h1>
+        <p className="intro-subtitle">A Grievance Tracker for the Traveling City</p>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-grow flex items-center justify-center px-6">
-        <div className="max-w-3xl text-center space-y-8">
-          {/* Description Section */}
-          <p className="bg-purple-700/50 rounded-xl p-6 leading-relaxed shadow-lg">
+      {/* Main */}
+      <main className="intro-main">
+        <section className="intro-content">
+          <p className="intro-description">
             The Circus of Wonders isn't just a show; it's a mobile city with its
             own citizens—the performers, vendors, and roadies. But as this city
             springs up overnight, its infrastructure often breaks down: main
@@ -25,37 +25,25 @@ function Intro() {
             smoothly as the show itself.
           </p>
 
-          {/* Buttons */}
-          <div className="flex gap-6 justify-center">
-            <Link
-              to="/login"
-              className="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 transition font-semibold shadow-md"
-            >
-              Login<br></br>
+          <div className="intro-buttons">
+            <Link to="/login" className="intro-btn">
+              Login
             </Link>
-            <Link
-              to="/signup"
-              className="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 transition font-semibold shadow-md"
-            >
+            <Link to="/signup" className="intro-btn">
               Sign Up
             </Link>
           </div>
-        </div>
+        </section>
       </main>
 
       {/* Footer */}
-      <footer className="p-6 text-center border-t border-purple-700 text-sm">
-        <p className="mb-2">
+      <footer className="intro-footer">
+        <p>
           &copy; {new Date().getFullYear()} Circus of Wonders | All Rights Reserved
         </p>
         <p>
           Contact us:{" "}
-          <a
-            href="mailto:support@circusofwonders.com"
-            className="underline hover:text-purple-300"
-          >
-            support@circusofwonders.com
-          </a>
+          <a href="mailto:support@circusofwonders.com">support@circusofwonders.com</a>
         </p>
       </footer>
     </div>

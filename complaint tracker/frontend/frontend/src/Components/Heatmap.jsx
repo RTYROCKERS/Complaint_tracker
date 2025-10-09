@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import L from "leaflet";
 import "leaflet.heat";
 import "leaflet/dist/leaflet.css";
-
+import "../css/Group.css";
 export default function Heatmap({ posts }) {
   useEffect(() => {
     const map = L.map("map").setView([20, 78], 5); // Default center of India
@@ -44,5 +44,18 @@ export default function Heatmap({ posts }) {
     return () => map.remove();
   }, [posts]);
 
-  return <div id="map" style={{ height: "600px", width: "100%" }}></div>;
+  return (
+  <div className="create-group-modal1 p-4 shadow-lg rounded-lg">
+      <div
+        id="map"
+        className="modal-map"
+        style={{
+          width: "100%",
+          height: "600px",
+          borderRadius: "1rem",
+          overflow: "hidden",
+        }}
+      ></div>
+  </div>
+  )
 }

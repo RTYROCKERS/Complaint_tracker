@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import axios from "axios";
 import "./index.css";
 // Pages
-import ComplaintsPage from "./Pages/ComplaintPage.jsx";
 import Intro from "./Pages/Intro.jsx";
 import Login from "./Pages/Login.jsx";
 import Signup from "./Pages/Signup.jsx";
@@ -17,7 +16,7 @@ import Post from "./Pages/Post.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import LiveStatsPage from "./Pages/LiveStatsPage.jsx";
 import SLAPage from './Pages/SLAPage.jsx';
-const API = "http://localhost:5000";
+const API = process.env.REACT_APP_BACKEND;
 function App() {
   // Initialize token safely
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -91,7 +90,6 @@ function App() {
           <div className="mt-[10%] h-[90%] overflow-y-auto bg-gray-100 p-4">
             <Routes>
               <Route path="/portal" element={<Portal />} />
-              <Route path="/complaints" element={<ComplaintsPage />} />
               <Route path="/heatmap" element={<HeatmapPage />} />
               <Route path="/group" element={<GroupPage />} />
               <Route path="/groupIndex" element={<GroupIndex />} />
@@ -99,7 +97,7 @@ function App() {
               <Route path="/livestats" element={<LiveStatsPage />} />
               <Route path="/sla" element={<SLAPage />} />
               <Route path="/post/:post_id" element={<Post/>} />
-              <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+              <Route path="*" element={<Portal />} />
             </Routes>
           </div>
         </div>

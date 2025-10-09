@@ -1,0 +1,144 @@
+/* ===========================
+   GROUP INDEX – Circus Caravan Theme
+   =========================== */
+
+.group-index-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: "Poppins", "Inter", sans-serif;
+  color: #2f2a1f;
+}
+
+/* Header + Create Button */
+.group-index-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.group-index-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #069e6c;
+}
+
+.create-group-btn {
+  background: linear-gradient(135deg, #f5c07b, #069e6c);
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.create-group-btn:hover {
+  background: linear-gradient(135deg, #eccd41, #b967ff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Filters – now half-page width */
+.group-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  width: 50%;
+}
+
+.group-filters div {
+  flex: 1;
+}
+
+.group-filters label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.group-filters select {
+  padding: 0.5rem 0.8rem;
+  padding-right: 1.5rem; /* ensures text doesn't collide with arrow */
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.2);
+  font-size: 0.95rem;
+  background: rgba(255,255,255,0.95);
+  color: #2f2a1f;
+  min-width: 100%; /* fill its container */
+  appearance: none;
+}
+
+.group-filters select option:first-child {
+  color: #6b6b6b;
+}
+
+.group-filters select:focus {
+  outline: none;
+  border-color: #069e6c;
+  box-shadow: 0 0 6px rgba(6, 158, 108, 0.4);
+}
+
+/* Groups Grid */
+.groups-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.group-card {
+  padding: 1.5rem 1.2rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, #f19926, #069e6c, #b967ff); /* colorful gradient */
+  color: #fff; /* text white for contrast */
+}
+
+.group-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.group-card p {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* Hover Effect */
+.group-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+  background: linear-gradient(145deg, #eccd41, #0fbf9a, #c17eff); /* brighter on hover */
+}
+/* ===========================
+   RESPONSIVENESS
+   =========================== */
+@media (max-width: 900px) {
+  .group-index-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .group-filters {
+    width: 100%; /* full width on tablets */
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .group-card {
+    padding: 1.2rem 1rem; /* slightly smaller vertical padding on mobile */
+  }
+
+  .group-filters select {
+    min-width: 100%;
+  }
+}

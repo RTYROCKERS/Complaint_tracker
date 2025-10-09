@@ -6,7 +6,7 @@ import { OpenStreetMapProvider } from "leaflet-geosearch";
 import { getGroupPosts, createComplaint } from "../api/groups.js";
 import FilePreview from "../Components/FilePreview.jsx";
 import socket from "../socket";
-
+import "../css/Group.css";
 const markerIcon = new L.Icon({
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
   iconSize: [25, 41],
@@ -81,7 +81,7 @@ export default function GroupPage() {
     data.append("file", formData.photo);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/predict/", {
+      const res = await fetch(`${process.env.REACT_APP_PBACKEND}/predict/`, {
         method: "POST",
         body: data,
       });
@@ -141,151 +141,93 @@ export default function GroupPage() {
 
   return (
     <div className="container mx-auto p-4 relative">
-      <h1 className="text-2xl font-bold mb-4">Posts in Group {gname}</h1>
+      
+      <h1 className="text-3xl font-bold mb-6 text-circus-gold">
+        Posts in Group <span className="text-white">{gname}</span>
+      </h1>
 
       <button
         onClick={() => setShowModal(true)}
-        className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Add Post
+        className="btn-add-post">
+        + Add Post
       </button>
-
-      {posts.length === 0 ? (
-        <p className="text-gray-500">No posts available for this group.</p>
-      ) : (
-        posts.map((p) => (
-          
-          <div key={p.post_id} className="border rounded-lg p-4 mb-3 bg-white shadow">
-            <Link to={`/post/${p.post_id}`} state={{ post: p,creator:creator, gname: gname}}>
-              <h2 className="text-lg font-semibold cursor-pointer hover:underline">{p.title}</h2>
-            </Link>
-            <p className="text-gray-700">{p.description}</p>
-            {p.photourl && (
-              <div className="mt-2 w-64 h-64 border rounded overflow-hidden">
-                <img
-                  src={`http://localhost:5000${p.photourl}`}
-                  alt="Post"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            )}            
-            <div className="text-sm text-gray-500 mt-2">
-              Status: <span className="font-medium">{p.status}</span> • 
-              Type: {p.type} • Days_Required: {p.days_required} • 
-              {new Date(p.created_at).toLocaleString()}
-            </div>
-          </div>
-        ))
-      )}
-
+      {/* Modal remains mostly same, just update buttons and spacing */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-lg shadow-lg max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Create Post</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                name="title"
-                placeholder="Title"
-                value={formData.title}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-              <textarea
-                name="description"
-                placeholder="Description"
-                value={formData.description}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-                required
-              />
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              >
-                <option value="OPEN">Open</option>
-                <option value="IN_PROGRESS">In Progress</option>
-                <option value="RESOLVED">Resolved</option>
-              </select>
-              <input
-                type="text"
-                name="type"
-                placeholder="Type"
-                value={formData.type}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-              <input
-                type="number"
-                name="days_required"
-                placeholder="Days_Required"
-                value={formData.days_required}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
+        <div className="add-post-card mt-4">
+          <h2 className="text-2xl font-bold mb-4 text-circus-teal">Create Post</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input type="text" name="title" placeholder="Title" value={formData.title} onChange={handleChange} className=" phold input-field mb-2" required />
+            <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} className="phold input-field mb-2" required />
+            <select name="status" value={formData.status} onChange={handleChange} className="input-field mb-2">
+              <option value="OPEN">Open</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="RESOLVED">Resolved</option>
+            </select>
+            <input type="text" name="type" placeholder="Type" value={formData.type} onChange={handleChange} className="input-field mb-2" />
+            <input type="number" name="days_required" placeholder="Days Required" value={formData.days_required} onChange={handleChange} className="phold input-field mb-2" />
 
-              {/* Map Picker */}
-              <div className="h-64 w-full border rounded">
-                <MapContainer
-                  center={[20.5937, 78.9629]} // India center
-                  zoom={5}
-                  style={{ height: "100%", width: "100%" }}
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="http://osm.org/copyright">OSM</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <LocationPicker setFormData={setFormData} />
-                </MapContainer>
-              </div>
-              <p className="text-sm text-gray-500">
-                Selected: {formData.latitude}, {formData.longitude}
-              </p>
+            <div className="h-64 w-full border rounded-lg overflow-hidden">
+              <MapContainer center={[20.5937, 78.9629]} zoom={5} style={{ height: "100%", width: "100%" }}>
+                <TileLayer
+                  attribution='&copy; <a href="http://osm.org/copyright">OSM</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <LocationPicker setFormData={setFormData} />
+              </MapContainer>
+            </div>
 
-              <input
-                type="file"
-                name="photo"
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-              {preview && (
-                <div className="mt-2 mb-2">
-                  <p className="text-sm text-gray-500 mb-1">File Preview:</p>
-                  <div className="border rounded overflow-hidden bg-gray-100">
-                    <FilePreview fileUrl={preview} />
-                  </div>
+            <input type="file" name="photo" onChange={handleChange} className="input-field mb-2" />
+            {preview && (
+              <div className="mt-2">
+                <p className="text-sm text-gray-500 mb-1">File Preview:</p>
+                <div className="file-preview mb-2">
+                  <FilePreview fileUrl={preview} />
                 </div>
-              )}
-              <button
-                type="button"
-                onClick={handlePredict}
-                className="mt-2 mb-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-              >
-                Predict
-              </button>
-
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                >
-                  Submit
-                </button>
               </div>
-            </form>
-          </div>
+            )}
+
+            <button type="button" onClick={handlePredict} className="btn-predict mb-2">
+              Predict
+            </button>
+
+            <div className="flex justify-end gap-3">
+              <button type="button" onClick={() => setShowModal(false)} className="btn-predict mb-2">Cancel</button>
+              <button type="submit" className="btn-submit">Submit</button>
+            </div>
+          </form>
         </div>
       )}
-    </div>
+      {posts.length === 0 ? (
+        <p className="text-gray-300 italic">No posts available for this group.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {posts.map((p) => (
+            <div key={p.post_id} className="bg-white/90 p-4 rounded-xl shadow-lg hover:shadow-2xl transition relative">
+              <Link to={`/post/${p.post_id}`} state={{ post: p, creator, gname }} className="post-card-link"> 
+              <div className={`status-ribbon ${p.status.toLowerCase()}`}>
+                {p.status.replace("_", " ")}
+              </div>
+              
+                <h2 className="text-xl font-semibold cursor-pointer hover:text-circus-teal">{p.title}</h2>
+              
+              <p className="text-gray-700 mt-2">{p.description}</p>
+              {p.photourl && (
+                <div className="mt-3 w-full h-48 border rounded overflow-hidden bg-gray-100">
+                  <FilePreview fileUrl={`${p.photourl}`} />
+                </div>
+              )}
+              <div className="text-sm text-gray-500 mt-3">
+                Status: <span className="font-medium">{p.status}</span> • 
+                Type: {p.type} • Days: {p.days_required} • 
+                {new Date(p.created_at).toLocaleString()}
+              </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+
+      
+  </div>
   );
 }

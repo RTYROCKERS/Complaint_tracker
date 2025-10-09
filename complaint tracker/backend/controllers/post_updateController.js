@@ -2,17 +2,32 @@ import pool from "../db.js";
 
 export const addResolvement = async (req, res) => {
   const { official_id, post_id, update_text} = req.body;
-  const photoUrl = req.file ? `/uploads/${req.file.filename}` : null;
-
+  let photoUrl = null;
   try {
-    const result = await pool.query(
-      `INSERT INTO post_resolvements (official_id, post_id, update_text, photoUrl)
-       VALUES ($1, $2, $3, $4) RETURNING *`,
-      [official_id, post_id, update_text, photoUrl]
-    );
+    if (req.file && req.file.buffer) {
+      // Upload buffer to Cloudinary
+      const uploadResult = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "complaint_tracker_uploads" },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+        stream.end(req.file.buffer);
+      });
 
-    res.json({ message: "Resolvement update submitted", resolvement_update: result.rows[0] });
-  } catch (err) {
+      photoUrl = uploadResult.secure_url; // Cloudinary URL
+    }
+    
+  const result = await pool.query(
+    `INSERT INTO post_resolvements (official_id, post_id, update_text, photoUrl)
+      VALUES ($1, $2, $3, $4) RETURNING *`,
+    [official_id, post_id, update_text, photoUrl]
+  );
+
+  res.json({ message: "Resolvement update submitted", resolvement_update: result.rows[0] });
+  }catch (err) {
     console.error(err);
     res.status(500).json({ error: "Resolvement update failed to submit" });
   }

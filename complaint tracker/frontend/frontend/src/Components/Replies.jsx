@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getPostReplies } from "../api/groups"; // your frontend API function
 import socket from "../socket";
+import "../css/CreateGroupModal.css";
+import FilePreview from "../Components/FilePreview"; // adjust path if needed
+const API = process.env.REACT_APP_BACKEND;
 
 export default function Replies({ post_id }) {
   const [replies, setReplies] = useState([]);
@@ -11,7 +14,7 @@ export default function Replies({ post_id }) {
     try {
       setLoading(true);
       setError("");
-      const data = await getPostReplies(post_id); // fetch replies for this post
+      const data = await getPostReplies(post_id);
       setReplies(data);
     } catch (err) {
       setError("Failed to fetch replies.");
@@ -23,18 +26,17 @@ export default function Replies({ post_id }) {
   useEffect(() => {
     if (post_id) fetchReplies();
   }, [post_id]);
+
   // Socket listener for real-time replies
   useEffect(() => {
     if (!post_id) return;
 
-    // Join post-specific room
     socket.emit("joinPost", post_id);
     console.log("Joined post room:", post_id);
 
-    // Listen for new replies
     const handleNewReply = (newReply) => {
       console.log("📝 New reply received via socket:", newReply);
-      setReplies((prev) => [...prev, newReply]); // append new reply
+      setReplies((prev) => [...prev, newReply]);
     };
 
     socket.on("replyAdded", handleNewReply);
@@ -44,18 +46,32 @@ export default function Replies({ post_id }) {
     };
   }, [post_id]);
 
-  if (loading) return <p className="text-gray-500">Loading replies...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-  if (replies.length === 0) return <p className="text-gray-500">No replies yet.</p>;
+  if (loading) return <p className="text-gray-500 text-center">Loading replies...</p>;
+  if (error) return <p className="text-red-500 text-center">{error}</p>;
+  if (replies.length === 0) return <p className="text-gray-500 text-center">No replies yet.</p>;
 
   return (
     <div className="mt-4 space-y-4">
+      
       {replies.map((r) => (
-        <div key={r.reply_id} className="border rounded-lg p-3 bg-gray-50 shadow">
-          <div className="text-sm text-gray-600">
-            <span className="font-semibold">{r.name}</span> • {new Date(r.created_at).toLocaleString()}
+        <div key={r.reply_id} className="add-post-card">
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm text-black">
+              <span className="font-semibold">{r.name}</span>
+            </p>
+            <p className="text-xs text-gray-500">
+              {new Date(r.created_at).toLocaleString()}
+            </p>
           </div>
-          <p className="mt-1 text-gray-800">{r.content}</p>
+          <p className="text-black leading-relaxed">{r.content}</p>
+
+          {/* Optional: File if reply has attachment */}
+          {r.photourl && (
+            <div className="file-preview mt-2">
+              <FilePreview fileUrl={`${r.photourl}`} />
+            </div>
+            
+          )}
         </div>
       ))}
     </div>

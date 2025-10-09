@@ -1,0 +1,138 @@
+/* ===========================
+   NAVBAR – Circus Caravan Theme
+   =========================== */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg, #f5c07b, #069e6c);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  font-family: "Poppins", "Inter", sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Left Section */
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.navbar-logo {
+  height: 40px;
+  width: 40px;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.navbar-slogan {
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #fffbe6;
+  white-space: nowrap;
+}
+
+/* Right Section: Links + Button */
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.navbar-right a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.navbar-right a:hover {
+  color: #ffd88c;
+}
+
+.navbar-right button {
+  background: #ff5c5c;
+  color: #fff;
+  border: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.navbar-right button:hover {
+  background: #e04b4b;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+/* ===========================
+   RESPONSIVENESS
+   =========================== */
+
+/* Tablets */
+@media (max-width: 900px) {
+  .navbar-slogan {
+    display: none;
+  }
+
+  .navbar-right {
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .navbar-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .navbar-right {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .navbar-right button {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}
+.back-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.back-btn img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover img {
+  transform: translateX(-3px); /* slight hover effect */
+}

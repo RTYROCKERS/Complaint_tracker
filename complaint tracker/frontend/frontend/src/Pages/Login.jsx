@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
+import "../css/Login.css";
+const API = process.env.REACT_APP_BACKEND;
 
-function Login({ setToken ,onLogin}) {
+function Login({ setToken, onLogin }) {
   const [aadhar, setAadhar] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -11,36 +13,33 @@ function Login({ setToken ,onLogin}) {
     e.preventDefault();
 
     try {
-        const res = await axios.post("http://localhost:5000/auth/login", {
-            aadhar_no: aadhar,
-            password,
-        });
-
-        const data = res.data; // axios already parses JSON
-        onLogin(data.token);
-        //localStorage.setItem("token", data.token);
-        setToken(data.token);
-        navigate("/portal");
+      const res = await axios.post(`${API}/auth/login`, {
+        aadhar_no: aadhar,
+        password,
+      });
+      const data = res.data;
+      onLogin(data.token);
+      setToken(data.token);
+      navigate("/portal");
     } catch (err) {
-        console.error(err.response?.data || err.message);
-        alert(err.response?.data?.error || "Login failed");
+      console.error(err.response?.data || err.message);
+      alert(err.response?.data?.error || "Login failed");
     }
-
-    };
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-orange-300 to-yellow-200">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h1 className="text-xl font-semibold text-center mb-6 text-gray-800">
-          Login
-        </h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="login-container">
+      <div className="login-card">
+        <h1 className="login-title">🎪 Welcome Back to the Caravan</h1>
+        <p className="login-subtitle">Enter your details to access the portal</p>
+
+        <form onSubmit={handleSubmit} className="login-form">
           <input
             type="text"
             placeholder="Aadhar Number"
             value={aadhar}
             onChange={(e) => setAadhar(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-orange-300"
+            className="login-input"
             required
           />
           <input
@@ -48,22 +47,17 @@ function Login({ setToken ,onLogin}) {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-orange-300"
+            className="login-input"
             required
           />
-          <button
-            type="submit"
-            className="w-full bg-orange-500 text-white py-2 rounded-lg hover:bg-orange-600 transition"
-          >
+          <button type="submit" className="login-btn">
             Login
           </button>
         </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
+
+        <p className="login-footer">
           Don’t have an account?{" "}
-          <span
-            onClick={() => navigate("/signup")}
-            className="text-orange-600 cursor-pointer hover:underline"
-          >
+          <span onClick={() => navigate("/signup")} className="login-link">
             Sign Up
           </span>
         </p>

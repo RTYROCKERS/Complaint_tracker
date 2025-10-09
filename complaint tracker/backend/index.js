@@ -3,19 +3,19 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-
-import authRoutes from "./routes/login_signup.js";
+import dotenv from "dotenv";
+dotenv.config();
+import authRoutes from "./routes/auth.js";
 import complaintRoutes from "./routes/post.js";
 import statusRoutes from "./routes/status_change.js";
 import resolvementRoutes from "./routes/post_update.js";
 import heatmapRoutes from "./routes/heatmap.js";
 import statsRouter from "./routes/stats.js";
 import slaRoutes from "./routes/slaRoutes.js";
-
+import emailRoutes from "./routes/email.js";
 const app = express();
-
 // Middleware
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: process.env.FRONTEND, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
@@ -25,6 +25,7 @@ app.use("/auth", authRoutes);
 app.use("/", complaintRoutes);
 app.use("/", statusRoutes);
 app.use("/", resolvementRoutes);
+app.use("/", emailRoutes);
 app.use("/api/posts", heatmapRoutes);
 app.use("/api/stats", statsRouter);
 app.use("/api", slaRoutes);

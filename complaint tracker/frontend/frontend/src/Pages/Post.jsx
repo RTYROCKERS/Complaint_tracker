@@ -8,8 +8,8 @@ import AssignOfficial from "../Components/AssignOffical"; // new component for a
 import StatusChange from "../Components/StatusChange"; // new component for changing status
 import axios from "axios";
 import FilePreview from "../Components/FilePreview";
-
-const API = "http://localhost:5000";
+import "../css/Group.css";
+const API = process.env.REACT_APP_BACKEND;
 export default function Post() {
   const { post_id } = useParams();
   const location = useLocation();
@@ -65,83 +65,110 @@ export default function Post() {
   };
   return (
     <div className="container mx-auto p-6">
-      {/* Post details */}
-      <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
-      <p className="mb-3">{post.description}</p>
-      {post.photourl && (
-        <div className="mb-4 max-h-96 rounded overflow-hidden">
-          <FilePreview fileUrl={`${API}${post.photourl}`} />
+      <div className="post-card relative">
+        <div className={`status-ribbon ${post.status.toLowerCase()}`}>
+          {post.status.replace("_", " ")}
         </div>
-      )}
 
-      {/* Buttons */}
-      <div className="flex flex-wrap gap-3 mb-6">
-        <button
-          onClick={() => setActiveTab("addReply")}
-          className="bg-blue-500 text-white px-3 py-2 rounded"
-        >
-          Add Reply
-        </button>
-        <button
-          onClick={() => setActiveTab("replies")}
-          className="bg-gray-500 text-white px-3 py-2 rounded"
-        >
-          Show Replies
-        </button>
-        <button
-          onClick={() => setActiveTab("updates")}
-          className="bg-purple-500 text-white px-3 py-2 rounded"
-        >
-          Show Updates
-        </button>
+        {/* Post Details */}
+        <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
+        <p className="mb-3">{post.description}</p>
+        {post.photourl && (
+          <div className="mb-4 max-h-96 rounded overflow-hidden">
+            <FilePreview fileUrl={`${post.photourl}`} />
+          </div>
+        )}
 
-        {isOfficialView && (
-          <button
-            onClick={() => setActiveTab("addUpdate")}
-            className="bg-green-600 text-white px-3 py-2 rounded"
-          >
-            Add Update
+        
+        {/* Action Buttons */}
+        <div className="flex flex-wrap gap-3 mb-6">
+          <button onClick={() => setActiveTab("addReply")} className="btn-add-post">
+            Add Reply
           </button>
-        )}
+          <button onClick={() => setActiveTab("replies")} className="btn-add-post">
+            Show Replies
+          </button>
+          <button onClick={() => setActiveTab("updates")} className="btn-add-post">
+            Show Updates
+          </button>
 
-        {isModeratorView && (
-          <>
-            <button
-              onClick={() => setShowAssign(!showAssign)}
-              className="bg-yellow-500 text-white px-3 py-2 rounded"
-            >
-              {showAssign ? "Close Assign Menu" : "Assign Official"}
+          {isOfficialView && (
+            <button onClick={() => setActiveTab("addUpdate")} className="btn-add-post">
+              Add Update
             </button>
-            <button
-              onClick={handleRemoveOfficial}
-              className="bg-red-600 text-white px-3 py-2 rounded"
-            >
-              Remove Official
-            </button>
-            <button
-              onClick={() => setShowStatusChange(!showStatusChange)}
-              className="bg-indigo-600 text-white px-3 py-2 rounded"
-            >
-              {showStatusChange ? "Close Status Menu" : "Change Status"}
-            </button>
-            <button
-              onClick={handleRemovePost}
-              className="bg-red-800 text-white px-3 py-2 rounded"
-            >
-              Delete Post
-            </button>
-          </>
-        )}
-      </div>
+          )}
 
-      {/* Conditional Rendering */}
-      <div>
-        {activeTab === "replies" && <Replies post_id={post_id} />}
-        {activeTab === "addReply" && <AddReply post={post} />}
-        {activeTab === "updates" && <Updates post_id={post_id} />}
-        {activeTab === "addUpdate" && <AddUpdate post_id={post_id} />}
-        {showAssign && isModeratorView && <AssignOfficial post_id={post_id} />}
-        {showStatusChange && isModeratorView && <StatusChange status={post.status} post_id={post_id} onStatusUpdate={handleStatusUpdate}/>}
+          {isModeratorView && (
+            <>
+              <button onClick={() => setShowAssign(!showAssign)} className="btn-add-post">
+                {showAssign ? "Close Assign Menu" : "Assign Official"}
+              </button>
+              <button onClick={handleRemoveOfficial} className="btn-add-post">
+                Remove Official
+              </button>
+              <button onClick={() => setShowStatusChange(!showStatusChange)} className="btn-add-post">
+                {showStatusChange ? "Close Status Menu" : "Show / Change Status"}
+              </button>
+              <button onClick={handleRemovePost} className="btn-add-post">
+                Delete Post
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Conditional Rendered Content */}
+        <div className="content-wrapper">
+          {/* Main Tab Content */}
+          {activeTab === "addReply" && <AddReply post={post} />}
+          {activeTab === "addUpdate" && <AddUpdate post_id={post_id} />}
+          {activeTab === "replies" && <Replies post_id={post_id} />}
+          {activeTab === "updates" && <Updates post_id={post_id} />}
+
+          {/* Overlay Modals */}
+          {showAssign && isModeratorView && (
+            <div className="create-group-modal-overlay">
+              <div className="create-group-modal text-black">
+                <h2>Assign Official</h2>
+                <AssignOfficial
+                  post_id={post_id}
+                  onClose={() => setShowAssign(false)}
+                />
+                <div className="modal-buttons">
+                  <button
+                    className="cancel-btn"
+                    onClick={() => setShowAssign(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showStatusChange && isModeratorView && (
+            <div className="create-group-modal-overlay">
+              <div className="create-group-modal text-black">
+                <h2>Show / Change Status</h2>
+                <StatusChange
+                  status={post.status}
+                  post_id={post_id}
+                  onStatusUpdate={(newStatus) => {
+                    handleStatusUpdate(newStatus);
+                    setShowStatusChange(false);
+                  }}
+                />
+                <div className="modal-buttons">
+                  <button
+                    className="cancel-btn"
+                    onClick={() => setShowStatusChange(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

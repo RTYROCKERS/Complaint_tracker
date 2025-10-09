@@ -1,0 +1,141 @@
+/* ===========================
+   LOGIN PAGE – Circus Caravan Theme
+   =========================== */
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 20% 30%, #f5c07b 0%, #069e6c 100%);
+  font-family: "Poppins", "Inter", sans-serif;
+  color: #2f2a1f;
+  padding: 1rem;
+}
+
+/* Card */
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Title & Subtitle */
+.login-title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #0f5132;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-subtitle {
+  font-size: 0.95rem;
+  color: #4e4a40;
+  margin-top: 0.3rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+/* Form */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.85rem 1.25rem; /* increased right padding */
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  color: #2f2a1f;
+}
+
+/* Placeholder styling */
+.login-input::placeholder {
+  color: rgba(47, 42, 31, 0.5);
+  padding-right: 0.25rem; /* small buffer on the right for visual spacing */
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: #069e6c;
+  box-shadow: 0 0 0 3px rgba(6, 158, 108, 0.2);
+  background: #fff;
+}
+
+/* Button */
+.login-btn {
+  background: linear-gradient(135deg, #f5c07b, #069e6c);
+  color: #fff;
+  border: none;
+  padding: 0.9rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #eccd41, #b967ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer */
+.login-footer {
+  margin-top: 1.8rem;
+  font-size: 0.9rem;
+  color: #4e4a40;
+}
+
+.login-link {
+  color: #069e6c;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: #b967ff;
+  text-decoration: underline;
+}
+
+/* ===========================
+   RESPONSIVENESS
+   =========================== */
+
+@media (max-width: 600px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-btn {
+    font-size: 0.95rem;
+  }
+
+  .login-title {
+    font-size: 1.6rem;
+  }
+}

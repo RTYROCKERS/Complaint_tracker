@@ -1,0 +1,117 @@
+/* ===========================
+   CREATE GROUP MODAL – Circus Caravan Theme
+   =========================== */
+
+.create-group-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 9999; /* high z-index to stay on top */
+}
+#create-group-map {
+  width: 100%;
+  height: 16rem; /* explicit height */
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+.create-group-modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  width: 90%;
+  max-width: 600px;
+  font-family: "Poppins", "Inter", sans-serif;
+  z-index: 10000;
+}
+
+.create-group-modal h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #069e6c;
+}
+
+.create-group-modal form input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.create-group-modal form input:focus {
+  outline: none;
+  border-color: #069e6c;
+  box-shadow: 0 0 5px rgba(6,158,108,0.3);
+}
+
+#create-group-map {
+  width: 100%;
+  height: 16rem; /* 64 in tailwind = 16rem */
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.15);
+  margin-bottom: 0.75rem;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Buttons */
+.create-group-modal .modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.create-group-modal button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+/* Cancel button */
+.create-group-modal .cancel-btn {
+  background: #b0b0b0;
+  color: #fff;
+}
+
+.create-group-modal .cancel-btn:hover {
+  background: #9e9e9e;
+}
+
+/* Create button */
+.create-group-modal .create-btn {
+  background: linear-gradient(135deg, #f5c07b, #069e6c, #b967ff);
+  color: #fff;
+}
+
+.create-group-modal .create-btn:hover {
+  background: linear-gradient(135deg, #eccd41, #0fbf9a, #c17eff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+/* ===========================
+   RESPONSIVENESS
+   =========================== */
+@media (max-width: 600px) {
+  .create-group-modal {
+    padding: 1.5rem;
+  }
+
+  .create-group-modal h2 {
+    font-size: 1.1rem;
+  }
+
+  .create-group-modal form input {
+    font-size: 0.9rem;
+  }
+}
+

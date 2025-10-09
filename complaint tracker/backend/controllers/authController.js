@@ -5,29 +5,29 @@ import pool from "../db.js";
 const SECRET_KEY = "supersecretkey"; // env var in production
 
 export const signup = async (req, res) => {
-  const { name, address, aadhar_no, password, role } = req.body;
+  const { name, address, aadhar_no, password, role, email } = req.body;
   try {
     const hashed = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
-      `INSERT INTO users (name, address, aadhar_no, password_hash, role) 
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [name, address, aadhar_no, hashed, role]
+      `INSERT INTO users (name, address, aadhar_no, password_hash, role, email) 
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [name, address, aadhar_no, hashed, role, email]
     );
 
     const user = result.rows[0];
 
-    // Insert into role-specific table
-    if (role === "citizen") {
-      await pool.query(`INSERT INTO citizens (user_id) VALUES ($1)`, [user.u_id]);
-    } else if (role === "moderator") {
-      await pool.query(`INSERT INTO moderators (user_id, groups_moderated) VALUES ($1, '{}')`, [user.u_id]);
-    } else if (role === "official") {
-      await pool.query(`INSERT INTO officials (user_id, groups, political_party) VALUES ($1, '[]', $2)`, [
-        user.u_id,
-        req.body.political_party || null,
-      ]);
-    }
+    // // Insert into role-specific table
+    // if (role === "citizen") {
+    //   await pool.query(`INSERT INTO citizens (user_id) VALUES ($1)`, [user.u_id]);
+    // } else if (role === "moderator") {
+    //   await pool.query(`INSERT INTO moderators (user_id, groups_moderated) VALUES ($1, '{}')`, [user.u_id]);
+    // } else if (role === "official") {
+    //   await pool.query(`INSERT INTO officials (user_id, groups, political_party) VALUES ($1, '[]', $2)`, [
+    //     user.u_id,
+    //     req.body.political_party || null,
+    //   ]);
+    // }
 
     res.json({ message: "Signup successful", user });
   } catch (err) {

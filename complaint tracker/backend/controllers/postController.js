@@ -1,5 +1,14 @@
 import pool from "../db.js";
+import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+dotenv.config();
 import { io } from "../index.js";
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
 export const createGroup = async(req,res) => {
     const {name,locality,city,user_id} =req.body;
     try{
@@ -73,9 +82,24 @@ export const getGroups = async (req, res) => {
 
 export const createComplaint = async (req, res) => {
   const { user_id, group_id, title, description, status, latitude, longitude, type, days_required} = req.body;
-  const photoUrl = req.file ? `/uploads/${req.file.filename}` : null;
-
+  let photoUrl = null;
   try {
+    if (req.file && req.file.buffer) {
+      // Upload buffer to Cloudinary
+      const uploadResult = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "complaint_tracker_uploads" },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+        stream.end(req.file.buffer);
+      });
+
+      photoUrl = uploadResult.secure_url; // Cloudinary URL
+    }
+
     const result = await pool.query(
       `INSERT INTO posts (user_id, group_id, title, description, status, photoUrl, latitude, longitude, type, days_required)
       VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9,$10) RETURNING *`,
@@ -98,25 +122,40 @@ export const createComplaint = async (req, res) => {
 
 export const addReply = async(req,res)=>{
     const {post_id,user_id,content}=req.body;
-    const photoUrl = req.file ? `/uploads/${req.file.filename}` : null;
+    let photoUrl = null;
     try {
-        const result = await pool.query(
-        `INSERT INTO post_replies (post_id,user_id,content,photoUrl)
-        VALUES ($1, $2, $3, $4) RETURNING *`,
-        [post_id,user_id,content,photoUrl]
-        );
-        const result2 = await pool.query(
-          `SELECT name FROM USERS
-          WHERE u_id=$1
-          `,[user_id]
-        );
-        const newReply={reply_id: result.rows[0].reply_id, 
-          content: result.rows[0].content,
-          created_at: result.rows[0].created_at,
-          name: result2.rows[0].name
-        };
-        io.to(`post_${post_id}`).emit("replyAdded", newReply);
-        res.json({ message: "Complaint reply submitted", complaint_reply: result.rows[0] });
+      if (req.file && req.file.buffer) {
+        // Upload buffer to Cloudinary
+        const uploadResult = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "complaint_tracker_uploads" },
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result);
+            }
+          );
+          stream.end(req.file.buffer);
+        });
+
+        photoUrl = uploadResult.secure_url; // Cloudinary URL
+      }
+      const result = await pool.query(
+      `INSERT INTO post_replies (post_id,user_id,content,photoUrl)
+      VALUES ($1, $2, $3, $4) RETURNING *`,
+      [post_id,user_id,content,photoUrl]
+      );
+      const result2 = await pool.query(
+        `SELECT name FROM USERS
+        WHERE u_id=$1
+        `,[user_id]
+      );
+      const newReply={reply_id: result.rows[0].reply_id, 
+        content: result.rows[0].content,
+        created_at: result.rows[0].created_at,
+        name: result2.rows[0].name
+      };
+      io.to(`post_${post_id}`).emit("replyAdded", newReply);
+      res.json({ message: "Complaint reply submitted", complaint_reply: result.rows[0] });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Failed to submit complaint_reply" });
@@ -127,7 +166,7 @@ export const getReply = async(req,res) => {
     const {post_id}=req.body;
     try{
       const query = `
-        SELECT p.reply_id, p.content, p.created_at, u.name
+        SELECT p.reply_id, p.content, p.created_at, u.name, p.photoUrl
         FROM post_replies p
         JOIN users u ON u.u_id = p.user_id
         WHERE p.post_id = $1
@@ -135,6 +174,7 @@ export const getReply = async(req,res) => {
       `;
 
       const result = await pool.query(query,[post_id]);
+      console.log(result.rows[0].photoUrl);
       res.json(result.rows);
     } catch (err) {
       console.error("Error fetching posts:", err.message);
