@@ -24,7 +24,7 @@ export default function Navbar() {
         </button>
         <img src="./Logo.jpg" alt="Logo" className="navbar-logo" />
         <span className="navbar-slogan">
-          “Turning Complaints into Solutions”
+          Complaint hain toh hum hai :)
         </span>
       </div>
 

@@ -163,7 +163,7 @@ export default function GroupPage() {
               <option value="IN_PROGRESS">In Progress</option>
               <option value="RESOLVED">Resolved</option>
             </select>
-            <input type="text" name="type" placeholder="Type" value={formData.type} onChange={handleChange} className="input-field mb-2" />
+            <input type="text" name="type" placeholder="Type" value={formData.type} onChange={handleChange} className="phold input-field mb-2" />
             <input type="number" name="days_required" placeholder="Days Required" value={formData.days_required} onChange={handleChange} className="phold input-field mb-2" />
 
             <div className="h-64 w-full border rounded-lg overflow-hidden">

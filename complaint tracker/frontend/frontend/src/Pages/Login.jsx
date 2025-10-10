@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/Login.css";
 
-const API = "http://localhost:5000";
+const API = process.env.REACT_APP_BACKEND;
 
 function Login({ setToken, onLogin }) {
   const [aadhar, setAadhar] = useState("");
@@ -13,7 +13,7 @@ function Login({ setToken, onLogin }) {
   // ✅ Initialize Google Identity Services
   useEffect(() => {
     /* global google */
-    const clientId = "549261398001-k28j8cql0dm971bmh4iaphojjssn5mo0.apps.googleusercontent.com";
+    const clientId = process.env.REACT_APP_CLIENT_ID;
     if (!window.google || !clientId) return;
 
     google.accounts.id.initialize({
@@ -43,7 +43,7 @@ function Login({ setToken, onLogin }) {
   // ✅ Handle Google login
   const handleGoogleResponse = async (response) => {
     try {
-      const res = await axios.post(`${API}/auth/google`, {
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND}/auth/google`, {
         id_token: response.credential,
       });
 
