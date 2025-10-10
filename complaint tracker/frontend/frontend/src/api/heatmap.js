@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const getHeatmapPosts = async (city = "", locality = "") => {
   try {
-    const res = await axios.get("http://localhost:5000/api/posts/heatmap", {
+    const res = await axios.get(`${process.env.REACT_APP_BACKEND}/api/posts/heatmap`, {
       params: { city, locality }, // send city & locality as query parameters
     });
     return res.data; // array of posts with latitude, longitude, type, severity, etc.
@@ -15,7 +15,7 @@ export const getHeatmapPosts = async (city = "", locality = "") => {
 
 export const getCityLocalities = async () => {
   try {
-    const res = await axios.get("http://localhost:5000/api/posts/getlocations");
+    const res = await axios.get(`${process.env.REACT_APP_BACKEND}/api/posts/getlocations`);
     return res.data; 
     // returns object like { "Bangalore": ["MG Road", "Indiranagar"], "Prayagraj": ["Civil Lines", "Katra"] }
   } catch (err) {

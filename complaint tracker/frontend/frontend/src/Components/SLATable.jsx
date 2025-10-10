@@ -1,6 +1,6 @@
 // frontend/src/components/SLATable.jsx
 import React from 'react';
-import './sla.css';
+import '../css/sla.css';
 
 function StatusBadge({ status }) {
   const cls = status ? status.toLowerCase().replace(/\s+/g, '_') : 'pending';

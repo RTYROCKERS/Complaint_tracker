@@ -3,8 +3,10 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
+
 import dotenv from "dotenv";
 dotenv.config();
+
 import authRoutes from "./routes/auth.js";
 import complaintRoutes from "./routes/post.js";
 import statusRoutes from "./routes/status_change.js";
@@ -34,7 +36,7 @@ app.use("/api", slaRoutes);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: `${process.env.FRONTEND}`,
     methods: ["GET", "POST"],
   },
 });

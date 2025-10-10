@@ -1,10 +1,10 @@
-// frontend/src/components/Reports/ReportPage.jsx
 import React, { useEffect, useState } from "react";
-import { getCityLocalities } from "../../api/heatmap.js"; // <- your existing API
+import { getCityLocalities } from "../../api/heatmap.js";
 import ExportButtons from "./ExportButtons.jsx";
+import "../../css/Group.css"; // <-- reuse your circus caravan theme file
 
 const ReportPage = () => {
-  const [locationsMap, setLocationsMap] = useState({}); // { City: [locality1, locality2] }
+  const [locationsMap, setLocationsMap] = useState({});
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedLocality, setSelectedLocality] = useState("");
 
@@ -13,7 +13,6 @@ const ReportPage = () => {
       try {
         const map = await getCityLocalities();
         setLocationsMap(map || {});
-        // set defaults to first available
         const cities = Object.keys(map || {});
         if (cities.length) {
           setSelectedCity(cities[0]);
@@ -27,7 +26,6 @@ const ReportPage = () => {
   }, []);
 
   useEffect(() => {
-    // When city changes, auto-select first locality of that city (if exists)
     if (selectedCity) {
       const locs = locationsMap[selectedCity] || [];
       setSelectedLocality((prev) => (locs.includes(prev) ? prev : locs[0] || ""));
@@ -39,51 +37,83 @@ const ReportPage = () => {
   const cities = Object.keys(locationsMap);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Generate Reports (CSV / PDF)</h2>
+    <div className="add-post-section" style={{ alignItems: "center", padding: "2rem 0" }}>
+      <div className="add-post-card" style={{ width: "90%", maxWidth: "600px" }}>
+        <h2
+          style={{
+            textAlign: "center",
+            color: "#003049",
+            fontFamily: "Fredoka One, Poppins, sans-serif",
+            marginBottom: "1rem",
+          }}
+        >
+          🎪 Generate Reports (CSV / PDF)
+        </h2>
 
-      <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
-        <div>
-          <label>City</label>
-          <br />
-          <select
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
-          >
-            <option value="">-- All Cities --</option>
-            {cities.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {/* City Dropdown */}
+          <div>
+            <label
+              style={{
+                fontWeight: "600",
+                color: "#000",
+                display: "block",
+                marginBottom: "0.25rem",
+              }}
+            >
+              City
+            </label>
+            <select
+              className="input-field"
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+            >
+              <option value="">-- All Cities --</option>
+              {cities.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div>
-          <label>Locality</label>
-          <br />
-          <select
-            value={selectedLocality}
-            onChange={(e) => setSelectedLocality(e.target.value)}
-            disabled={!selectedCity}
-          >
-            <option value="">-- All Localities --</option>
-            {(locationsMap[selectedCity] || []).map((L) => (
-              <option key={L} value={L}>
-                {L}
-              </option>
-            ))}
-          </select>
-        </div>
+          {/* Locality Dropdown */}
+          <div>
+            <label
+              style={{
+                fontWeight: "600",
+                color: "#000",
+                display: "block",
+                marginBottom: "0.25rem",
+              }}
+            >
+              Locality
+            </label>
+            <select
+              className="input-field"
+              value={selectedLocality}
+              onChange={(e) => setSelectedLocality(e.target.value)}
+              disabled={!selectedCity}
+            >
+              <option value="">-- All Localities --</option>
+              {(locationsMap[selectedCity] || []).map((L) => (
+                <option key={L} value={L}>
+                  {L}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div style={{ alignSelf: "flex-end" }}>
-          <small style={{ color: "#666" }}>
-            (Leave empty city/locality to export ALL)
+          <small style={{ color: "#4e4a40", textAlign: "center" }}>
+            (Leave empty city/locality to export <b>ALL</b>)
           </small>
+
+          {/* Export Buttons */}
+          <div style={{ textAlign: "center", marginTop: "1rem" }}>
+            <ExportButtons city={selectedCity} locality={selectedLocality} />
+          </div>
         </div>
       </div>
-
-      <ExportButtons city={selectedCity} locality={selectedLocality} />
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FilePreview from "../Components/FilePreview"; // adjust path if needed
 import "../css/CreateGroupModal.css";
-const API = process.env.REACT_APP_BACKEND;
+const API = `${process.env.REACT_APP_BACKEND}`;
 
 export default function Updates({ post_id }) {
   const [updates, setUpdates] = useState([]);

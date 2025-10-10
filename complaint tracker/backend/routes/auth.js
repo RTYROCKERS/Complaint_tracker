@@ -26,5 +26,13 @@ router.post("/type", async (req, res) => {
     res.status(500).json({ error: "Role fetching failed" });
   }
 });
-
+router.get("/me", async(req, res) => {const { user_id } = req.query;
+  try {
+    const result = await pool.query("SELECT name,email, address, role,aadhar_no FROM users WHERE u_id = $1", [user_id]);
+    res.json({ message: "User fetched", data: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "User fetching failed" });
+  }
+});
 export default router;

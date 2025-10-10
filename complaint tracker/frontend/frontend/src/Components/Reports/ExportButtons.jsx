@@ -1,8 +1,8 @@
-// frontend/src/components/Reports/ExportButtons.jsx
 import React, { useState } from "react";
-import { getHeatmapPosts } from "../../api/heatmap.js"; // <-- your provided API
+import { getHeatmapPosts } from "../../api/heatmap.js";
 import { jsonToCsvString, makeFilename } from "./reportUtils.jsx";
 import jsPDF from "jspdf";
+import "../../css/Group.css";
 
 const ExportButtons = ({ city = "", locality = "" }) => {
   const [loadingCsv, setLoadingCsv] = useState(false);
@@ -11,18 +11,14 @@ const ExportButtons = ({ city = "", locality = "" }) => {
   const downloadCSV = async () => {
     try {
       setLoadingCsv(true);
-      const data = await getHeatmapPosts(city, locality); // uses your existing API
+      const data = await getHeatmapPosts(city, locality);
       if (!data || data.length === 0) {
         alert("No data found for the selected city/locality.");
         return;
       }
 
-      // Convert to CSV string (you can switch to PapaParse if preferred)
       const csvString = jsonToCsvString(data);
-
-      const blob = new Blob([csvString], {
-        type: "text/csv;charset=utf-8;",
-      });
+      const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
       link.href = url;
@@ -48,21 +44,18 @@ const ExportButtons = ({ city = "", locality = "" }) => {
         return;
       }
 
-      // Simple PDF generation using jsPDF
       const doc = new jsPDF({ unit: "pt", format: "a4" });
       const margin = 40;
-      const maxWidth = 520; // a4 width minus margins for pt units
+      const maxWidth = 520;
       let y = 40;
       doc.setFontSize(14);
       doc.text(`Report for ${city || "All Cities"} - ${locality || "All"}`, margin, y);
       y += 18;
       doc.setFontSize(10);
 
-      // Prepare rows; limit fields shown to common ones if exist, otherwise use keys of first row
       const keys = Object.keys(data[0] || {});
-      const maxRowsPerPage = 38; // approximate, depends on row height
-
       let rowIndex = 0;
+
       for (let i = 0; i < data.length; i++) {
         const row = data[i];
         const rowText = keys
@@ -78,14 +71,8 @@ const ExportButtons = ({ city = "", locality = "" }) => {
           y += 12;
         }
         y += 6;
-        rowIndex++;
-        // Simple safety to avoid extremely huge PDFs on very large datasets; user can request CSV instead
-        if (rowIndex > 2000) {
-          doc.text(
-            "-- truncated (too many rows). Prefer CSV for large exports --",
-            margin,
-            y
-          );
+        if (++rowIndex > 2000) {
+          doc.text("-- truncated (too many rows). Prefer CSV for large exports --", margin, y);
           break;
         }
       }
@@ -100,13 +87,27 @@ const ExportButtons = ({ city = "", locality = "" }) => {
   };
 
   return (
-    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-      <button onClick={downloadCSV} disabled={loadingCsv}>
-        {loadingCsv ? "Preparing CSV..." : "Download CSV"}
-      </button>
-      <button onClick={downloadPDF} disabled={loadingPdf}>
-        {loadingPdf ? "Preparing PDF..." : "Download PDF"}
-      </button>
+    <div className="export-container">
+      <h2 className="export-title"> Export Your Reports </h2>
+      <p className="export-subtitle">Choose your preferred format below</p>
+
+      <div className="export-buttons">
+        <button
+          className="circus-button"
+          onClick={downloadCSV}
+          disabled={loadingCsv}
+        >
+          {loadingCsv ? "🎠 Preparing CSV..." : "🎟️ Download CSV"}
+        </button>
+
+        <button
+          className="circus-button"
+          onClick={downloadPDF}
+          disabled={loadingPdf}
+        >
+          {loadingPdf ? "🎡 Preparing PDF..." : "🎪 Download PDF"}
+        </button>
+      </div>
     </div>
   );
 };

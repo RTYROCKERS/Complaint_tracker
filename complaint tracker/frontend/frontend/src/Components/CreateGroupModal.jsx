@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import '../css/CreateGroupModal.css';
 
-const API = process.env.REACT_APP_BACKEND;
+const API = `${process.env.REACT_APP_BACKEND}`;
 
 export default function CreateGroupModal({ onClose }) {
   const [name, setName] = useState("");

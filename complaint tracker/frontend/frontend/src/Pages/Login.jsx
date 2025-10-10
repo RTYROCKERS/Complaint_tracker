@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/Login.css";
 
-const API = process.env.REACT_APP_BACKEND;
+const API = `${process.env.REACT_APP_BACKEND}`;
 
 function Login({ setToken, onLogin }) {
   const [aadhar, setAadhar] = useState("");

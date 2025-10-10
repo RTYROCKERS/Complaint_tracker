@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-const API = process.env.REACT_APP_BACKEND;
+const API = `${process.env.REACT_APP_BACKEND}`;
 
 export default function AssignOfficial({ post_id }) {
   const [officials, setOfficials] = useState([]);

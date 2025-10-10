@@ -212,10 +212,11 @@ export default function GroupPage() {
               
               <p className="text-gray-700 mt-2">{p.description}</p>
               {p.photourl && (
-                <div className="mt-3 w-full h-48 border rounded overflow-hidden bg-gray-100">
-                  <FilePreview fileUrl={`${p.photourl}`} />
-                </div>
-              )}
+                  <div className="mt-3 w-full max-w-sm h-48 border rounded overflow-hidden bg-gray-100 mx-auto">
+                    <FilePreview fileUrl={p.photourl} className="preview-image" />
+                  </div>
+                )}
+
               <div className="text-sm text-gray-500 mt-3">
                 Status: <span className="font-medium">{p.status}</span> • 
                 Type: {p.type} • Days: {p.days_required} • 

@@ -9,7 +9,7 @@ import StatusChange from "../Components/StatusChange"; // new component for chan
 import axios from "axios";
 import FilePreview from "../Components/FilePreview";
 import "../css/Group.css";
-const API = process.env.REACT_APP_BACKEND;
+const API = `${process.env.REACT_APP_BACKEND}`;
 export default function Post() {
   const { post_id } = useParams();
   const location = useLocation();

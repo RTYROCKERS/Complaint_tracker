@@ -1,0 +1,116 @@
+/* ==========================
+   🎪 Circus Theme for Portal
+   ========================== */
+
+.portal-container {
+  text-align: center;
+  padding: 40px;
+  animation: fadeIn 1s ease-in;
+}
+
+/* Title — circus style */
+.portal-title {
+  font-family: "Luckiest Guy", cursive;
+  font-size: 2.5rem;
+  letter-spacing: 3px;
+  color: #d62828;
+  text-shadow: 3px 3px 0 #fcbf49, 6px 6px 0 #003049;
+  margin-bottom: 30px;
+}
+
+/* User card — looks like a circus poster */
+.user-card {
+  display: inline-block;
+  background: repeating-linear-gradient(
+    45deg,
+    #ffe5b4,
+    #ffe5b4 10px,
+    #fff3e0 10px,
+    #fff3e0 20px
+  );
+  border: 6px double #d62828;
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 #003049;
+  padding: 25px 40px;
+  max-width: 400px;
+  animation: bounceIn 1s ease-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-5px) rotate(-1deg);
+  box-shadow: 10px 10px 0 #003049;
+}
+
+/* Circus-like headings */
+.user-card h2 {
+  font-family: "Fredoka One", cursive;
+  color: #003049;
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+}
+
+/* Circus detail text */
+.user-card p {
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  color: #1e1e1e;
+  margin: 8px 0;
+}
+
+.user-card strong {
+  color: #d62828;
+}
+
+/* Loading text */
+.loading-text {
+  font-family: "Courier New", monospace;
+  color: #f77f00;
+  font-size: 1.2rem;
+  animation: pulse 1.2s infinite;
+}
+
+/* ---------------------------
+   ✨ Animations
+   --------------------------- */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Optional: circus fonts from Google Fonts
+   Add these lines in index.html <head> if not already included:
+   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka+One&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+*/

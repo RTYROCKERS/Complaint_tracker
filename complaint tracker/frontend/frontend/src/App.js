@@ -16,7 +16,9 @@ import Post from "./Pages/Post.jsx";
 import Navbar from "./Components/Navbar.jsx";
 import LiveStatsPage from "./Pages/LiveStatsPage.jsx";
 import SLAPage from './Pages/SLAPage.jsx';
-const API = process.env.REACT_APP_BACKEND;
+
+const API = `${process.env.REACT_APP_BACKEND}`;
+
 function App() {
   // Initialize token safely
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -43,6 +45,7 @@ function App() {
         setToken(t);
         localStorage.setItem("role", res.data.user.role);
         localStorage.setItem("userId", res.data.user.u_id);
+        console.log("User ID:",localStorage.getItem("userId"));
       } else {
         handleLogout();
       }

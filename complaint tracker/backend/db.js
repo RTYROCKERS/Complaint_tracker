@@ -1,17 +1,15 @@
 import pkg from "pg";
 const { Pool } = pkg;
+import dotenv from "dotenv";
+dotenv.config();
 
 const pool = new Pool({
-  user: "postgres.ymdphoefdmgbnhblkvia",
-  host: "aws-1-us-east-1.pooler.supabase.com", // <-- Session Pooler host
-  database: "postgres",
-  password: "CircusHunters",
-  port: 6543, // <-- Pooler port (different from 5432)
-  ssl: { rejectUnauthorized: false },
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+  ssl: process.env.PG_SSL === "true" ? { rejectUnauthorized: false } : false,
 });
 
 export default pool;
-
-
-//CircusHunters
-//5432

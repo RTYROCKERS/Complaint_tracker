@@ -3,7 +3,7 @@ import { getPostReplies } from "../api/groups"; // your frontend API function
 import socket from "../socket";
 import "../css/CreateGroupModal.css";
 import FilePreview from "../Components/FilePreview"; // adjust path if needed
-const API = process.env.REACT_APP_BACKEND;
+const API = `${process.env.REACT_APP_BACKEND}`;
 
 export default function Replies({ post_id }) {
   const [replies, setReplies] = useState([]);

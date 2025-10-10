@@ -15,11 +15,11 @@ function Intro() {
       <main className="intro-main">
         <section className="intro-content">
           <p className="intro-description">
-            The Circus of Wonders isn't just a show; it's a mobile city with its
+            The Circus of Wonders isn't just a show; it's a smart city with its
             own citizens—the performers, vendors, and roadies. But as this city
             springs up overnight, its infrastructure often breaks down: main
             pathways become damaged, water lines to the caravans leak, and
-            garbage piles up. Your mission is to build a formal grievance
+            garbage piles up. Our mission is to build a formal grievance
             tracker where any circus citizen can report these municipal issues
             and watch them get resolved, ensuring their traveling city runs as
             smoothly as the show itself.
@@ -43,7 +43,7 @@ function Intro() {
         </p>
         <p>
           Contact us:{" "}
-          <a href="mailto:support@circusofwonders.com">support@circusofwonders.com</a>
+          <a href="mailto:complainttracker1234@gmail.com">support@circusofwonders.com</a>
         </p>
       </footer>
     </div>

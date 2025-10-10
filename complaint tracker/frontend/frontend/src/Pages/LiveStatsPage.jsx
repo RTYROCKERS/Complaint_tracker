@@ -3,7 +3,7 @@ import { getStats } from "../api/apiClient.js";
 import { PieChart, Pie, BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Cell } from "recharts";
 import { io } from "socket.io-client";
 import "../css/Group.css";
-const API = "http://localhost:5000";
+const API = `${process.env.REACT_APP_BACKEND}`;
 const socket = io(API);
 
 const chartColors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A020F0"];

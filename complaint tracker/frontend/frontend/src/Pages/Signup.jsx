@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import "../css/Signup.css";
-const API = process.env.REACT_APP_BACKEND;
+const API = `${process.env.REACT_APP_BACKEND}`;
 function Signup({ setToken }) {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
