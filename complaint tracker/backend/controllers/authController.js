@@ -3,6 +3,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import pool from "../db.js";
+import { Server } from "socket.io";
+import dotenv from "dotenv";
+dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || ""; // set in .env
@@ -64,14 +67,6 @@ export const login = async (req, res) => {
   }
 };
 
-/**
- * Google login endpoint
- * Accepts: { id_token: "<google id token>" }
- * Behavior:
- *  - verifies token with Google
- *  - if email verified and exists in users table -> return JWT (same as normal login)
- *  - if email not found -> return 401 with { error: "Google Authentication failed" }
- */
 export const googleLogin = async (req, res) => {
   const { id_token } = req.body;
   if (!id_token) return res.status(400).json({ error: "Missing id_token" });
@@ -82,12 +77,13 @@ export const googleLogin = async (req, res) => {
   }
 
   try {
+    // Verify token with Google
     const ticket = await googleClient.verifyIdToken({
       idToken: id_token,
       audience: GOOGLE_CLIENT_ID,
     });
-    const payload = ticket.getPayload();
 
+    const payload = ticket.getPayload();
     const email = payload?.email;
     const email_verified = payload?.email_verified;
 
@@ -95,19 +91,28 @@ export const googleLogin = async (req, res) => {
       return res.status(401).json({ error: "Email not verified by Google" });
     }
 
-    // find user by email
-    const q = "SELECT * FROM users WHERE email = $1";
-    const result = await pool.query(q, [email]);
+    // Check if user exists in DB
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
     if (result.rowCount === 0) {
-      // do NOT auto-create — per your requirement
-      return res.status(401).json({ error: "Google Authentication failed" });
+      // Email not in DB → login fails
+      return res.status(401).json({ error: "Google Authentication failed: user not found" });
     }
 
     const user = result.rows[0];
-    const token = jwt.sign({ u_id: user.u_id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign(
+      { u_id: user.u_id, role: user.role },
+      JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
-    res.json({ message: "Login successful", token, role: user.role, user: { u_id: user.u_id, email: user.email, name: user.name } });
+    // Return JWT + minimal user info
+    res.json({
+      message: "Login successful",
+      token,
+      role: user.role,
+      user: { u_id: user.u_id, email: user.email, name: user.name }
+    });
   } catch (err) {
     console.error("Google token verify error:", err);
     return res.status(401).json({ error: "Invalid Google token" });

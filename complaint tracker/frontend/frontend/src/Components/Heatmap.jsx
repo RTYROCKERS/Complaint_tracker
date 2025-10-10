@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import L from "leaflet";
 import "leaflet.heat";
 import "leaflet/dist/leaflet.css";
@@ -19,7 +19,9 @@ const createPinIcon = (color = "#069e6c") =>
   });
 
 export default function Heatmap({ posts }) {
+  const [mapError, setMapError] = useState(false);
   useEffect(() => {
+    try{
     const map = L.map("map").setView([20, 78], 5);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -49,7 +51,7 @@ export default function Heatmap({ posts }) {
       });
 
       // Show/hide markers based on zoom
-      if (map.getZoom() >= 8) map.removeLayer(markerLayer);
+      if (map.getZoom() >= 5) map.removeLayer(markerLayer);
       else map.addLayer(markerLayer);
 
       map.on("zoomend", () => {
@@ -64,8 +66,12 @@ export default function Heatmap({ posts }) {
       const bounds = posts.map((p) => [p.latitude, p.longitude]);
       map.fitBounds(bounds, { padding: [50, 50] });
     }
-
+  
     return () => map.remove();
+  }catch (err) {
+      console.error("Leaflet map failed to load:", err);
+      setMapError(true);
+    }
   }, [posts]);
 
   return (

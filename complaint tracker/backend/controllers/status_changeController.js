@@ -15,7 +15,6 @@ export const changePostStatus = async(req,res)=>{
         );
 
         const user_email = rows[0]?.email;
-
         // 3️⃣ Send email directly
         if (user_email) {
         const subject = `📌 Your post status has changed`;
