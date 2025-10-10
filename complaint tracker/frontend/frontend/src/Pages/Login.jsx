@@ -103,11 +103,6 @@ function Login({ setToken, onLogin }) {
           className="login-btn"
           style={{ backgroundColor: "#4285F4", marginTop: "0" }}
         >
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-            alt="Google"
-            style={{ width: "18px", verticalAlign: "middle", marginRight: "10px" }}
-          />
           Sign in with Google
         </button>
       </div>
