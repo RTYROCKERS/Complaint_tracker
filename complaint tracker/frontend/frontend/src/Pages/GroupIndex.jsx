@@ -88,7 +88,7 @@ export default function GroupIndex() {
             className="group-card"
             onClick={() =>
               navigate("/group", {
-                state: { group_id: g.group_id, creator: g.created_by, gname: g.name },
+                state: { group_id: g.group_id, creator: g.created_by, gname: g.name, gcity: g.city, glocality: g.locality },
               })
             }
           >

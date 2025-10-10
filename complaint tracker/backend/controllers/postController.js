@@ -61,7 +61,7 @@ export const getGroups = async (req, res) => {
     }
 
     let query = `
-      SELECT g.group_id, g.name, g.created_by, u.name AS created_by_name, g.created_at
+      SELECT g.group_id, g.name, g.created_by, u.name AS created_by_name, g.created_at, g.city, g.locality
       FROM groups g
       JOIN users u ON g.created_by = u.u_id
     `;

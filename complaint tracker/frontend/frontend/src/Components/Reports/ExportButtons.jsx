@@ -1,18 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
+import axios from "axios";
 import { getHeatmapPosts } from "../../api/heatmap.js";
 import { jsonToCsvString, makeFilename } from "./reportUtils.jsx";
-import jsPDF from "jspdf";
 import "../../css/Group.css";
 
 const ExportButtons = ({ city = "", locality = "" }) => {
+  const [groups, setGroups] = useState([]);
+  const [selectedGroup, setSelectedGroup] = useState("");
   const [loadingCsv, setLoadingCsv] = useState(false);
   const [loadingPdf, setLoadingPdf] = useState(false);
+
+  const normalizedCity = city?.trim().toLowerCase() || "";
+  const normalizedLocality = locality?.trim().toLowerCase() || "";
+
+  // useMemo ensures re-fetch triggers only when actual value changes
+  const fetchParams = useMemo(() => {
+    return { city: normalizedCity, locality: normalizedLocality };
+  }, [normalizedCity, normalizedLocality]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const params = {};
+        if (city) params.city = city;
+        if (locality) params.locality = locality;
+
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND}/getGroups`, { params });
+        console.log("Groups fetched:", res.data);
+        setGroups(res.data || []);
+        if (res.data?.length) setSelectedGroup(res.data[0].group_id);
+        else setSelectedGroup("");
+      } catch (err) {
+        console.error("Failed to fetch groups:", err);
+        setGroups([]);
+        setSelectedGroup("");
+      }
+    })();
+  }, [city, locality]);
+
 
   const downloadCSV = async () => {
     try {
       setLoadingCsv(true);
       const data = await getHeatmapPosts(city, locality);
-      if (!data || data.length === 0) {
+      if (!data?.length) {
         alert("No data found for the selected city/locality.");
         return;
       }
@@ -29,58 +60,36 @@ const ExportButtons = ({ city = "", locality = "" }) => {
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error("CSV export error:", err);
-      alert("Failed to generate CSV. Check console for details.");
+      alert("Failed to generate CSV.");
     } finally {
       setLoadingCsv(false);
     }
   };
 
   const downloadPDF = async () => {
+    if (!selectedGroup) {
+      alert("Please select a group first.");
+      return;
+    }
     try {
       setLoadingPdf(true);
-      const data = await getHeatmapPosts(city, locality);
-      if (!data || data.length === 0) {
-        alert("No data found for the selected city/locality.");
-        return;
-      }
-
-      const doc = new jsPDF({ unit: "pt", format: "a4" });
-      const margin = 40;
-      const maxWidth = 520;
-      let y = 40;
-      doc.setFontSize(14);
-      doc.text(`Report for ${city || "All Cities"} - ${locality || "All"}`, margin, y);
-      y += 18;
-      doc.setFontSize(10);
-
-      const keys = Object.keys(data[0] || {});
-      let rowIndex = 0;
-
-      for (let i = 0; i < data.length; i++) {
-        const row = data[i];
-        const rowText = keys
-          .map((k) => `${k}: ${row[k] === undefined ? "" : String(row[k])}`)
-          .join(" | ");
-        const split = doc.splitTextToSize(rowText, maxWidth);
-        for (const line of split) {
-          if (y > 780) {
-            doc.addPage();
-            y = 40;
-          }
-          doc.text(line, margin, y);
-          y += 12;
-        }
-        y += 6;
-        if (++rowIndex > 2000) {
-          doc.text("-- truncated (too many rows). Prefer CSV for large exports --", margin, y);
-          break;
-        }
-      }
-
-      doc.save(makeFilename("report", city, locality, "pdf"));
+     const res = await axios.post(
+      `${process.env.REACT_APP_PBACKEND2}/batch_summary/`,
+      { group_id: selectedGroup }, // body data
+      { responseType: "blob" }
+      );
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `report_group_${selectedGroup}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error("PDF export error:", err);
-      alert("Failed to generate PDF. Check console for details.");
+      alert("Failed to generate PDF.");
     } finally {
       setLoadingPdf(false);
     }
@@ -88,8 +97,33 @@ const ExportButtons = ({ city = "", locality = "" }) => {
 
   return (
     <div className="export-container">
-      <h2 className="export-title"> Export Your Reports </h2>
+      <h2 className="export-title">Export Your Reports</h2>
       <p className="export-subtitle">Choose your preferred format below</p>
+
+      <div style={{ marginBottom: "1rem" }}>
+        <label style={{ fontWeight: 600 }}>Select Group (for PDF)</label>
+        <select
+          className="input-field"
+          value={selectedGroup}
+          onChange={(e) => setSelectedGroup(e.target.value)}
+        >
+          <option value="">-- Choose a Group --</option>
+          {groups.map((g) => {
+            const localityStr = g.locality || "";
+            const cityStr = g.city || "";
+            const suffix =
+              localityStr || cityStr
+                ? ` (${localityStr}${localityStr && cityStr ? ", " : ""}${cityStr})`
+                : "";
+            return (
+              <option key={g.group_id} value={g.group_id}>
+                {g.name}
+                {suffix}
+              </option>
+            );
+          })}
+        </select>
+      </div>
 
       <div className="export-buttons">
         <button
@@ -103,7 +137,7 @@ const ExportButtons = ({ city = "", locality = "" }) => {
         <button
           className="circus-button"
           onClick={downloadPDF}
-          disabled={loadingPdf}
+          disabled={loadingPdf || !selectedGroup}
         >
           {loadingPdf ? "🎡 Preparing PDF..." : "🎪 Download PDF"}
         </button>

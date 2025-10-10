@@ -11,20 +11,20 @@ export default function CreateGroupModal({ onClose }) {
   const [city, setCity] = useState("");
   const [locality, setLocality] = useState("");
   const [coords, setCoords] = useState(null);
+  const [validLocation, setValidLocation] = useState(false); // new
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
-    // Initialize the map
     if (!mapRef.current) {
-        mapRef.current = L.map("map").setView([20.5937, 78.9629], 5); // Center of India
+      mapRef.current = L.map("map").setView([20.5937, 78.9629], 5); // Center of India
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: "© OpenStreetMap contributors",
-        }).addTo(mapRef.current);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(mapRef.current);
 
-        mapRef.current.on("click", async (e) => {
+      mapRef.current.on("click", async (e) => {
         const { lat, lng } = e.latlng;
         setCoords({ lat, lng });
 
@@ -32,37 +32,42 @@ export default function CreateGroupModal({ onClose }) {
         if (markerRef.current) markerRef.current.remove();
         markerRef.current = L.marker([lat, lng]).addTo(mapRef.current);
 
-        // Reverse geocode to get **only city and locality**
+        // Reverse geocode
         try {
-            const res = await fetch(
+          const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
-            );
-            const data = await res.json();
+          );
+          const data = await res.json();
 
-            // Pick **only city and locality** fields
-            const cityName =
+          const cityName =
             data.address.city ||
             data.address.town ||
             data.address.village ||
-            data.address.county || // fallback
+            data.address.county ||
             "";
-            const localityName =
+          const localityName =
             data.address.suburb ||
             data.address.neighbourhood ||
             data.address.locality ||
-            data.address.road || // fallback
+            data.address.road ||
             "";
 
-            setCity(cityName);
-            setLocality(localityName);
+          setCity(cityName);
+          setLocality(localityName);
+
+          // Check if reverse geocoding returned valid city & locality
+          if (cityName && localityName) setValidLocation(true);
+          else setValidLocation(false);
         } catch (err) {
-            console.error("Reverse geocoding failed:", err);
+          console.error("Reverse geocoding failed:", err);
+          setValidLocation(false);
         }
-        });
+      });
     }
-     setTimeout(() => {
-        mapRef.current.invalidateSize();
-     }, 100);
+
+    setTimeout(() => {
+      mapRef.current.invalidateSize();
+    }, 100);
 
     return () => {
       if (mapRef.current) mapRef.current.remove();
@@ -72,7 +77,8 @@ export default function CreateGroupModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!coords) return alert("Please select a location on the map.");
+    if (!validLocation) return alert("Please select a valid location on the map with city and locality.");
+
     try {
       await axios.post(`${API}/newGroup`, {
         name,
@@ -109,13 +115,13 @@ export default function CreateGroupModal({ onClose }) {
             className="border w-full p-2 rounded"
             placeholder="City"
             value={city}
-            onChange={(e) => setCity(e.target.value)}
+            readOnly
           />
           <input
             className="border w-full p-2 rounded"
             placeholder="Locality"
             value={locality}
-            onChange={(e) => setLocality(e.target.value)}
+            readOnly
           />
 
           <div className="flex justify-end gap-3 mt-4">
@@ -128,7 +134,8 @@ export default function CreateGroupModal({ onClose }) {
             </button>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded"
+              className={`px-4 py-2 rounded text-white ${validLocation ? "bg-blue-600" : "bg-gray-400 cursor-not-allowed"}`}
+              disabled={!validLocation}
             >
               Create
             </button>
