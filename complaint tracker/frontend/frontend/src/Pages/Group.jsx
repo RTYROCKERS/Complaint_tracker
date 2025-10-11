@@ -295,7 +295,7 @@ export default function GroupPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {posts.map((p) => (
-            <div key={p.post_id} className="bg-white/90 p-4 rounded-xl shadow-lg transition relative">
+            <div key={p.post_id} className="mainpost">
               <Link to={`/post/${p.post_id}`} state={{ post: p, creator, gname }} className="post-card-link">
                 <div className={`status-ribbon ${p.status ? p.status.toLowerCase() : "open"}`}>
                   {p.status ? p.status.replace("_", " ") : "OPEN"}
