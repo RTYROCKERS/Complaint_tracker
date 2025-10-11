@@ -271,6 +271,22 @@
   object-fit: cover; /* Keeps aspect ratio while filling the box */
   border-radius: 8px;
 }
+.mainpost {
+  width: 100%;             /* takes full width of parent container */
+  max-width: 400px;        /* optional: standardize max width */
+  height: 400px;           /* fixed height for uniform cards */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;        /* hides image overflow */
+  box-sizing: border-box;
+  position: relative;
+}
 
 /* Prevent color change on hover, active, or visited */
 .post-card-link:hover,
