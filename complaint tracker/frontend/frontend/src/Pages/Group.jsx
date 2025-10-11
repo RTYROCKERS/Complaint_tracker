@@ -202,7 +202,7 @@ export default function GroupPage() {
       return alert("Please select a valid location within 100 km of the group.");
     }
     const data = new FormData();
-    data.append("user_id", 1);
+    data.append("user_id", localStorage.getItem("userId"));
     data.append("group_id", group_id);
     Object.keys(formData).forEach((key) => {
       if (formData[key]) data.append(key, formData[key]);
