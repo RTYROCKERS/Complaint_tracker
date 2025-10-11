@@ -30,7 +30,7 @@ function Row({ p }) {
       </td>
       <td>
         <div className="author">
-          <div className="name">{p.author ? p.author_name : '—'}</div>
+          <div className="name">{p.author ? p.author.name : '—'}</div>
           <div className="meta">{p.created_at ? new Date(p.created_at).toLocaleString() : ''}</div>
         </div>
       </td>
