@@ -10,7 +10,7 @@ export default function FilePreview({ fileUrl }) {
       <img
         src={fileUrl}
         alt="Uploaded file"
-        className="w-full h-full object-contain rounded-md bg-gray-100"
+        className="rounded-md border mt-2 w-full h-48 object-cover"
       />
     );
   }
@@ -19,7 +19,7 @@ export default function FilePreview({ fileUrl }) {
     return (
       <video
         controls
-        className="w-full h-full object-contain rounded-md bg-gray-100"
+        className="rounded-md border mt-2 w-full h-48 object-cover"
       >
         <source src={fileUrl} type={`video/${ext}`} />
         Your browser does not support video playback.
