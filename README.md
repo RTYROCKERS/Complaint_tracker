@@ -108,8 +108,3 @@ This system integrates **four self-developed AI models** — designed and implem
 | **Visualization** | Leaflet.js, Recharts |
 | **Hosting** | Render (Backend) + Vercel (Frontend) |
 
----
-
-
-git clone https://github.com/<your-username>/circus-of-wonders.git
-cd circus-of-wonders
