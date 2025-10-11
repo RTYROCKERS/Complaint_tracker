@@ -272,20 +272,21 @@
   border-radius: 8px;
 }
 .mainpost {
-  width: 20%;                         /* each post takes ~20% of parent width */
-  aspect-ratio: 4 / 3;                /* keeps proportional height */
+  width: 32%;                         /* large card, fits ~3 per row on desktop */
+  min-height: 420px;                  /* enough height for image + text + button */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: stretch;
   background-color: #fff;
   border-radius: 12px;
-  padding: 12px;
-  margin: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;                  /* ✅ ensures Summary button/modal is never hidden */
   position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 /* Prevent color change on hover, active, or visited */
 .post-card-link:hover,
