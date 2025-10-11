@@ -272,22 +272,22 @@
   border-radius: 8px;
 }
 .mainpost {
-  width: 100%;             /* takes full width of parent container */
-  max-width: 400px;        /* optional: standardize max width */
-  height: 400px;           /* fixed height for uniform cards */
+  width: 100%;
+  max-width: 400px;                 /* standard card width on large screens */
+  min-height: 350px;                /* baseline height */
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   background-color: #fff;
   border-radius: 12px;
   padding: 16px;
   margin: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;        /* hides image overflow */
   box-sizing: border-box;
   position: relative;
+  overflow: visible;                /* ✅ ensures summary/modal visible */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-
 /* Prevent color change on hover, active, or visited */
 .post-card-link:hover,
 .post-card-link:visited,
