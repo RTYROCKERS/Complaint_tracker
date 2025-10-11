@@ -272,21 +272,8 @@
   border-radius: 8px;
 }
 .mainpost {
-  width: 32%;                         /* large card, fits ~3 per row on desktop */
-  min-height: 420px;                  /* enough height for image + text + button */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  margin: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
-  overflow: visible;                  /* ✅ ensures Summary button/modal is never hidden */
-  position: relative;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  width: 10%;
+  height:10%;
 }
 /* Prevent color change on hover, active, or visited */
 .post-card-link:hover,
